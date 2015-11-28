@@ -13,7 +13,7 @@ class Player :
 
 	void update(sf::Time deltaTime);
 
-	void onCollision(const Entity& entity);
+	void onCollisionEnter(const Entity& entity);
 
 };
 

@@ -2,37 +2,26 @@
 #include "Game.h"
 #include "Totem.h"
 #include "Player.h"
+#include "AnimatedSprite.h"
+#include "List.h"
+#include <iostream>
+using namespace std;
 
 int main()
 {
 	Game game;
 	sf::Clock clock;
-	sf::RenderWindow window(sf::VideoMode(1000, 500), "SFML works!");
-
-
-	sf::Texture face;
-	face.loadFromFile("Assets\\PlayerFace.png");
-	sf::Texture totemPng;
-	totemPng.loadFromFile("Assets\\totem.png");
-
-
+	sf::RenderWindow window(sf::VideoMode(800, 800), "SFML works!");
+	window.setView(sf::View(sf::FloatRect(0, 0, 400, 400)));
 
 	Player* player = new Player();
-	player->getSprite().setTexture(face);
-	player->getHitbox().height = 20;
-	player->getHitbox().width = 20;
+	player->setHitbox(sf::FloatRect(0, 0, 10, 10));
 
 	Totem* totem = new Totem();
-	totem->getSprite().setTexture(totemPng);
-	totem->getHitbox().height = 50;
-	totem->getHitbox().width = 20;
-
-	totem->move(50.0f, 50.0f);
-
-	game.addEntity(totem);
+	totem->setHitbox(sf::FloatRect(20,20,10, 10));
+	
 	game.addEntity(player);
-
-	window.setView(sf::View(sf::FloatRect(0, 0, 200, 100)));
+	game.addEntity(totem);
 
 
 	while (window.isOpen())

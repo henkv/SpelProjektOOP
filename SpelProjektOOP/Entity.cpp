@@ -16,12 +16,12 @@ Entity::~Entity()
 
 void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-	target.draw(this->sprite, states);
+	target.draw(sprite, states);
 
 	sf::RectangleShape rect;
 	rect.setOutlineColor(sf::Color::Green);
 	rect.setOutlineThickness(0.5f);
-	rect.setSize(sf::Vector2f(hitbox.height, hitbox.width));
+	rect.setSize(sf::Vector2f(hitbox.width, hitbox.height));
 	rect.setPosition(sf::Vector2f(hitbox.left, hitbox.top));
 	rect.setFillColor(sf::Color::Transparent);
 
@@ -30,23 +30,16 @@ void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const
 }
 
 
-void Entity::onCollision(const Entity& entity) 
-{}
-
-
-void Entity::setState(int state)
+void Entity::setSprite(sf::Sprite sprite)
 {
-	this->state = state;
+	this->sprite = sprite;
 }
-
+void Entity::setHitbox(sf::FloatRect hitbox)
+{
+	this->hitbox = hitbox;
+}
 
 sf::Sprite& Entity::getSprite()
-{
-	return this->sprite;
-}
-
-
-const sf::Sprite& Entity::getSprite() const
 {
 	return this->sprite;
 }
@@ -58,25 +51,13 @@ size_t Entity::getId() const
 }
 
 
-int Entity::getState() const
-{
-	return this->state;
-}
-
-
 sf::FloatRect& Entity::getHitbox()
 {
 	return this->hitbox;
 }
 
 
-const sf::FloatRect& Entity::getHitbox() const
-{
-	return this->hitbox;
-}
-
-
-bool Entity::operator=(const Entity& entity) const
+bool Entity::operator==(const Entity& entity) const
 {
 	return this->id == entity.id;
 }
@@ -103,3 +84,36 @@ void Entity::move(const sf::Vector2f &offset)
 	this->hitbox.top += offset.y;
 	this->sprite.move(offset);
 }
+
+void Entity::setRotation(float angle)
+{
+	sprite.setRotation(angle);
+}
+
+
+void Entity::collisionStart(Entity* entity)
+{
+	if (collisionList.exists(entity))
+	{
+		onCollisionStay(entity);
+	}
+	else
+	{
+		std::cout << getId() << " srt col with " << entity->getId() << "\n";
+		collisionList.add(entity);
+		onCollisionEnter(entity);
+	}
+}
+void Entity::collisionEnd(Entity* entity)
+{
+	if (collisionList.exists(entity))
+	{
+		std::cout << getId() << " end col with " << entity->getId() << "\n";
+		collisionList.remove(entity);
+		onCollisionExit(entity);
+	}
+}
+
+void Entity::onCollisionEnter(const Entity* entity) {}
+void Entity::onCollisionStay(const Entity* entity)  {}
+void Entity::onCollisionExit(const Entity* entity)  {}

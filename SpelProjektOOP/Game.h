@@ -1,18 +1,13 @@
 #pragma once
 #include "SFML\Graphics\Drawable.hpp"
-
 #include "Entity.h"
+#include "List.h"
 
 class Game :
 	public sf::Drawable
 {
 	private:
-	Entity** entityList;
-
-	size_t nrOfEntities;
-	size_t entityCap;
-
-	void expandEntityList();
+	List<Entity> entityList;
 
 	public:
 	Game();
@@ -20,10 +15,11 @@ class Game :
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	void update(sf::Time deltaTime);
-	void checkCollision(Entity& entityOne, Entity& entityTwo);
-	bool removeEntity(const Entity& entity);
-	int  findEntity(const Entity& entity) const;
+
+	void checkCollision(Entity* entityOne, Entity* entityTwo);
+
 	void addEntity(Entity* entity);
+
 
 };
 

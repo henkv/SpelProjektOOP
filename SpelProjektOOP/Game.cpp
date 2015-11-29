@@ -18,6 +18,8 @@ Game::~Game()
 
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	target.draw(map, states);
+
 	for (size_t i = 0; i < entityList.length(); i++)
 	{
 		target.draw(*entityList[i], states);
@@ -58,4 +60,19 @@ void Game::checkCollision(Entity* entityOne, Entity* entityTwo)
 void Game::addEntity(Entity* entity)
 {
 	entityList.add(entity);
+}
+
+
+
+
+
+
+
+
+
+
+
+sf::Sprite& Game::getMap()
+{
+	return map;
 }

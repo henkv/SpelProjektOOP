@@ -6,7 +6,10 @@
 #include "List.h"
 #include <iostream>
 #include <string>
+#include "Food.h"
 using namespace std;
+
+
 
 int main()
 {
@@ -15,35 +18,53 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(400, 400), "Food Get!");
 	sf::View gameView(sf::Vector2f(0, 0), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
 
+
+	sf::Texture mapBg;
+	mapBg.loadFromFile("Assets\\wallhaven-151737.jpg");
+	mapBg.setSmooth(false);
+
+	game.getMap().setTexture(mapBg);
+	game.getMap().setOrigin(1920 / 2, 1080 / 2);
+
 	sf::Texture maroWalk;
 	maroWalk.loadFromFile("Assets\\mariowalks-sheet.png");
+	maroWalk.setSmooth(false);
+	
+	AnimatedSprite playerSprite;
+	playerSprite.setTexture(maroWalk);
+	playerSprite.setFrameSize(sf::Vector2i(16, 32));
+	playerSprite.setFrameDuration(sf::milliseconds(100));
+	playerSprite.addAnimation(sf::IntRect(0, 0, 8, 1));
+	playerSprite.addAnimation(sf::IntRect(0, 1, 8, 1));
+	playerSprite.addAnimation(sf::IntRect(0, 2, 8, 1));
+	playerSprite.addAnimation(sf::IntRect(0, 3, 8, 1));
+	playerSprite.addAnimation(sf::IntRect(0, 4, 8, 1));
+	playerSprite.setAnimation(0);
 
 	Player* player = new Player();
-	player->setHitbox(sf::FloatRect(-5, -10, 10, 10));
-	player->getSprite().setTexture(maroWalk);
-	player->getSprite().setFrameSize(sf::Vector2i(16, 32));
-	player->getSprite().setOrigin(sf::Vector2f(8, 32));
-	player->getSprite().setFrameDuration(sf::milliseconds(100));
+	player->setHitbox(sf::FloatRect(2, 26, 12, 6));
+	player->setSprite(playerSprite);
+	player->setOrigin(sf::Vector2f(8, 16));
 
-	player->getSprite().addAnimation(sf::IntRect(0, 0, 8, 1));
-	player->getSprite().addAnimation(sf::IntRect(0, 1, 8, 1));
-	player->getSprite().addAnimation(sf::IntRect(0, 2, 8, 1));
-	player->getSprite().addAnimation(sf::IntRect(0, 3, 8, 1));
-	player->getSprite().addAnimation(sf::IntRect(0, 4, 8, 1));
-
-	player->getSprite().setAnimation(0);
-
-	Totem* totem = new Totem();
-	totem->setHitbox(sf::FloatRect(20, 20, 10, 10));
-	Totem* totem2 = new Totem();
-	totem2->setHitbox(sf::FloatRect(28, 20, 10, 10));
-	
 	game.addEntity(player);
-	game.addEntity(totem);
-	game.addEntity(totem2);
-	game.addEntity(totem2);
-	game.addEntity(totem2);
-	game.addEntity(totem2);
+
+
+	sf::Texture foodT;
+	foodT.loadFromFile("Assets\\Fruit.png");
+	foodT.setSmooth(false);
+
+
+
+
+	for (size_t i = 0; i < 10; i++)
+	{
+		Food* food = new Food();
+		food->getSprite().setTexture(foodT);
+		food->setHitbox(sf::FloatRect(12, 2, 18, 12));
+		food->setPosition(sf::Vector2f(rand() % 300, rand() % 300));
+		food->setOrigin(sf::Vector2f(17, 6));
+		game.addEntity(food);
+	}
 
 	while (window.isOpen())
 	{
@@ -57,7 +78,6 @@ int main()
 		game.update(clock.restart());
 
 		gameView.setCenter(player->getSprite().getPosition());
-		gameView.move(sf::Vector2f(0, -16));
 
 		window.setView(gameView);
 		window.clear();

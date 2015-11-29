@@ -16,6 +16,10 @@ class Entity :
 	static size_t nextId;
 	size_t id;
 	AnimatedSprite sprite;
+	sf::Transformable transform;
+	sf::Vector2f hitboxPosition;
+	sf::Vector2f hitboxBaseOffset;
+	sf::Vector2f hitboxOffset;
 	sf::FloatRect hitbox;
 	List<size_t> collisionList;
 
@@ -24,23 +28,28 @@ class Entity :
 	virtual ~Entity();
 
 	virtual void update(sf::Time deltaTime) = 0;
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+	virtual void draw(sf::RenderTarget &target, 
+					  sf::RenderStates states) const;
+
+	void setSprite(const AnimatedSprite& sprite);
+	void setHitbox(sf::FloatRect hitbox);
+
+	size_t getId() const;
+	const sf::FloatRect& getHitbox() const;
+	const AnimatedSprite& getSprite() const;
+	AnimatedSprite& getSprite();
+
+	void move(const sf::Vector2f& offset);
+	void setScale(const sf::Vector2f& factors);
+	void setOrigin(const sf::Vector2f& origin);
+	void setPosition(const sf::Vector2f& position);
+	const sf::Vector2f& getPosition() const;
 
 	void collisionStart(Entity* entity);
 	void collisionEnd(Entity* entity);
 	virtual void onCollisionEnter(Entity* entity);
 	virtual void onCollisionStay(Entity* entity);
 	virtual void onCollisionExit(Entity* entity);
-
-	void setSprite(AnimatedSprite sprite);
-	void setHitbox(sf::FloatRect hitbox);
-
-	sf::FloatRect& getHitbox();
-	AnimatedSprite& getSprite();
-	size_t getId() const;
-
-	void move(const sf::Vector2f& offset);
-	void setScale(const sf::Vector2f& factors);
 
 	bool operator==(const Entity& entity) const;
 	bool operator<(const Entity& entity) const;

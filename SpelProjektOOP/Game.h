@@ -8,6 +8,7 @@ class Game :
 {
 	private:
 	List<Entity*> entityList;
+	sf::Sprite map;
 
 	public:
 	Game();
@@ -18,6 +19,8 @@ class Game :
 
 	void checkCollision(Entity* entityOne, Entity* entityTwo);
 	void addEntity(Entity* entity);
+
+	sf::Sprite& getMap();
 
 };
 

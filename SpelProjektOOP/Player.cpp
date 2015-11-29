@@ -6,6 +6,7 @@
 #include <iostream>
 #include "SFML\Graphics\Texture.hpp"
 #include "SFML\Window\Mouse.hpp"
+#include "Game.h"
 
 Player::Player()
 	: Creature()
@@ -56,18 +57,35 @@ void Player::update(sf::Time deltaTime)
 
 }
 
-void Player::onCollisionEnter(Entity* entity)
+void Player::eat(Food* food)
 {
-	std::cout << "Outch!\n";
+	hunger += food->getKcal();
+	food->setScale(sf::Vector2f(0.25f, 0.25f));
 }
 
+
+void Player::onCollisionEnter(Entity* entity)
+{
+	Food* food = dynamic_cast<Food*>(entity);
+	if (food != nullptr)
+	{
+		eat(food);
+		std::cout << "Yum!\n";
+	}
+	else
+	{
+		std::cout << "Outch!\n";
+	}
+}
 void Player::onCollisionStay(Entity* entity) 
 {
 	//std::cout << "!";
 }
-
-
 void Player::onCollisionExit(Entity* entity)
 {
-	std::cout << "Whew!\n";
+	Food* food = dynamic_cast<Food*>(entity);
+	if (food == nullptr)
+	{
+		std::cout << "Whew!\n";
+	}
 }

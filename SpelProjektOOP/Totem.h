@@ -11,5 +11,8 @@ class Totem
 	virtual ~Totem();
 
 	void update(sf::Time deltaTime);
+
+	void Totem::onCollisionStay(Entity* entity);
+
 };
 

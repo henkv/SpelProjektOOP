@@ -13,7 +13,9 @@ class Player :
 
 	void update(sf::Time deltaTime);
 
-	void onCollisionEnter(const Entity& entity);
+	void onCollisionEnter(Entity* entity);
+	void onCollisionStay(Entity* entity);
+	void onCollisionExit(Entity* entity);
 
 };
 

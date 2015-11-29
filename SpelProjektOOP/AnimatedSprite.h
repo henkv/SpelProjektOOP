@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML\Graphics\Sprite.hpp"
 #include "SFML\System\Time.hpp"
+#include "List.h"
 
 class AnimatedSprite
 	: public sf::Sprite
@@ -11,6 +12,8 @@ class AnimatedSprite
 	sf::Vector2i currentFrame;
 	sf::Vector2i frameSize;
 	sf::IntRect animationBounds;
+	UList<sf::IntRect> animations;
+	size_t currentAnimation;
 
 	public:
 	AnimatedSprite();
@@ -21,5 +24,9 @@ class AnimatedSprite
 	void setFrameSize(sf::Vector2i size);
 	void setFrameDuration(sf::Time duration);
 	void setAnimationBounds(sf::IntRect bounds);
+
+	void addAnimation(sf::IntRect animationBounds);
+	void setAnimation(size_t id);
+	size_t getAnimation() const;
 };
 

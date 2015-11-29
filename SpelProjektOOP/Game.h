@@ -7,7 +7,7 @@ class Game :
 	public sf::Drawable
 {
 	private:
-	List<Entity> entityList;
+	List<Entity*> entityList;
 
 	public:
 	Game();
@@ -17,9 +17,7 @@ class Game :
 	void update(sf::Time deltaTime);
 
 	void checkCollision(Entity* entityOne, Entity* entityTwo);
-
 	void addEntity(Entity* entity);
-
 
 };
 

@@ -2,8 +2,6 @@
 
 AnimatedSprite::AnimatedSprite()
 {
-	frameSize.x = 16;
-	frameSize.y = 16;
 }
 
 
@@ -62,3 +60,26 @@ void AnimatedSprite::setAnimationBounds(sf::IntRect bounds)
 	));
 }
 
+void AnimatedSprite::addAnimation(sf::IntRect animationBounds)
+{
+	animations.add(animationBounds);
+}
+void AnimatedSprite::setAnimation(size_t id)
+{
+	currentAnimation = id;
+	animationBounds = animations[id];
+	currentFrame.x %= animationBounds.width;
+	currentFrame.y %= animationBounds.height;
+
+	setTextureRect(sf::IntRect(
+		(animationBounds.left + currentFrame.x) * frameSize.x,
+		(animationBounds.top + currentFrame.y) * frameSize.y,
+		frameSize.x,
+		frameSize.y
+	));
+}
+
+size_t AnimatedSprite::getAnimation() const
+{
+	return currentAnimation;
+}

@@ -6,15 +6,15 @@ template<typename T>
 class List
 {
 	private:
-	T** elements;
-	size_t nrOf;
-	size_t cap;
+	T* elements;
+	int nrOf;
+	int cap;
 	void expand()
 	{
 		cap += 10;
-		T** newList = new T*[cap];
+		T* newList = new T[cap];
 
-		for (size_t i = 0; i < nrOf; i++)
+		for (int i = 0; i < nrOf; i++)
 		{
 			newList[i] = elements[i];
 		}
@@ -22,10 +22,12 @@ class List
 		delete[] elements;
 		elements = newList;
 	}
-	int check(const T* element) const
+	public:
+
+	int check(const T element) const
 	{
 		bool found = false;
-		int pos = 0;
+		int pos = -1;
 		int low = 0;
 		int high = nrOf;
 		int check = 0;
@@ -34,41 +36,41 @@ class List
 		{
 			check = (high + low) / 2;
 
-			if (*elements[check] == *element)
+			if (elements[check] == element)
 			{
+				pos = -1;
 				found = true;
-				pos = -2;
 			}
-			else if (*elements[check] < *element)
+			else if (elements[check] < element)
 			{
 				low = check + 1;
-				pos = check;
+				pos = check + 1;
 			}
-			else if (*elements[check] > *element)
+			else if (elements[check] > element)
 			{
 				high = check - 1;
-				pos = check - 1;
+				pos = check;
 			}
 		}
 
 		return pos;
 	}
-	int find(const T* element) const
+	int find(const T element) const
 	{
 		int pos = -1;
 		int low = 0;
 		int high = nrOf;
 		int check = 0;
 
-		while (low <= high && pos == -1)
+		while (nrOf > 0 && low <= high && pos == -1)
 		{
 			check = (high + low) / 2;
 
-			if (*elements[check] == *element)
+			if (elements[check] == element)
 			{
 				pos = check;
 			}
-			else if (*elements[check] < *element)
+			else if (elements[check] < element)
 			{
 				low = check + 1;
 			}
@@ -81,29 +83,28 @@ class List
 		return pos;
 	}
 
-	public:
 	List()
 	{
 		nrOf = 0;
 		cap = 10;
-		elements = new T*[cap];
+		elements = new T[cap];
 	}
 	virtual ~List() { delete[] elements; }
 	
-	size_t length() const
+	int length() const
 	{
 		return nrOf;
 	}
 
-	void add(T* element)
+	bool add(const T element)
 	{
+		bool added = false;
 		int pos = check(element);
 
-		if (pos != -2)
+		if (pos != -1)
 		{
 			if (nrOf >= cap) expand();
-
-			if (pos == nrOf)
+			if (pos > nrOf)
 			{
 				elements[nrOf++] = element;
 			}
@@ -113,40 +114,146 @@ class List
 				{
 					elements[i] = elements[i - 1];
 				}
-				elements[pos + 1] = element;
+				
+				elements[pos] = element;
 				nrOf++;
 			}
-
+			added = true;
 		}
+
+		return added;
 	}
 
-	bool exists(const T* element) const
+	bool exists(const T element) const
 	{
 		return find(element) != -1;
 	}
 
-	void remove(const T* element)
+	void remove(const T element)
 	{
 		int pos = find(element);
 
 		if (pos != -1)
 		{
-			nrOf--;
-			for (size_t i = pos; i < nrOf; i++)
+			for (int i = pos; i < nrOf - 1; i++)
 			{
 				elements[i] = elements[i + 1];
 			}
+			nrOf--;
+			elements[nrOf] = NULL;
 		}
 	}
 
-	T* operator[](size_t pos)
+	T& begin() { return elements[0]; }
+	T& end() { return elements[nrOf]; }
+
+	T& operator[](size_t pos)
 	{
 		return elements[pos];
 	}
-	const T* operator[](size_t pos) const
+	const T& operator[](size_t pos) const
 	{
 		return elements[pos];
 	}
 
 };
 
+template<typename T>
+class UList
+{
+	private:
+	T* elements;
+	int nrOf;
+	int cap;
+	void expand()
+	{
+		cap += 10;
+		T* newList = new T[cap];
+
+		for (int i = 0; i < nrOf; i++)
+		{
+			newList[i] = elements[i];
+		}
+
+		delete[] elements;
+		elements = newList;
+	}
+	public:
+
+	int find(const T element) const
+	{
+		int pos = -1;
+
+		for (size_t i = 0; i < nrOf && pos == -1; i++)
+		{
+			if (elements[i] == element)
+			{
+				pos = i;
+			}
+		}
+
+		return pos;
+	}
+
+	UList()
+	{
+		nrOf = 0;
+		cap = 10;
+		elements = new T[cap];
+	}
+	virtual ~UList() { delete[] elements; }
+
+	int length() const
+	{
+		return nrOf;
+	}
+
+	void add(const T element)
+	{
+		if (nrOf >= cap) expand();
+		elements[nrOf++] = element;
+	}
+
+	bool exists(const T element) const
+	{
+		return find(element) != -1;
+	}
+
+	void remove(int pos)
+	{
+		for (int i = pos; i < nrOf - 1; i++)
+		{
+			elements[i] = elements[i + 1];
+		}
+		nrOf--;
+		elements[nrOf] = NULL;
+	}
+
+	void remove(const T element)
+	{
+		int pos = find(element);
+
+		if (pos != -1)
+		{
+			for (int i = pos; i < nrOf - 1; i++)
+			{
+				elements[i] = elements[i + 1];
+			}
+			nrOf--;
+			elements[nrOf] = NULL;
+		}
+	}
+
+	T& begin() { return elements[0]; }
+	T& end() { return elements[nrOf]; }
+
+	T& operator[](size_t pos)
+	{
+		return elements[pos];
+	}
+	const T& operator[](size_t pos) const
+	{
+		return elements[pos];
+	}
+
+};

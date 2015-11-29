@@ -10,15 +10,14 @@
 #include "List.h"
 
 class Entity : 
-	public sf::Drawable,
-	public sf::Transformable
+	public sf::Drawable
 {
 	private:
 	static size_t nextId;
-	List<Entity> collisionList;
-	sf::Sprite sprite;
-	sf::FloatRect hitbox;
 	size_t id;
+	AnimatedSprite sprite;
+	sf::FloatRect hitbox;
+	List<size_t> collisionList;
 
 	public:
 	Entity();
@@ -29,21 +28,19 @@ class Entity :
 
 	void collisionStart(Entity* entity);
 	void collisionEnd(Entity* entity);
-	virtual void onCollisionEnter(const Entity* entity);
-	virtual void onCollisionStay(const Entity* entity);
-	virtual void onCollisionExit(const Entity* entity);
+	virtual void onCollisionEnter(Entity* entity);
+	virtual void onCollisionStay(Entity* entity);
+	virtual void onCollisionExit(Entity* entity);
 
-	void setSprite(sf::Sprite sprite);
+	void setSprite(AnimatedSprite sprite);
 	void setHitbox(sf::FloatRect hitbox);
 
 	sf::FloatRect& getHitbox();
-	sf::Sprite& getSprite();
+	AnimatedSprite& getSprite();
 	size_t getId() const;
 
-
-	void setRotation(float angle);
-	void move(float offsetX, float offsetY);
-	void move(const sf::Vector2f &offset);
+	void move(const sf::Vector2f& offset);
+	void setScale(const sf::Vector2f& factors);
 
 	bool operator==(const Entity& entity) const;
 	bool operator<(const Entity& entity) const;

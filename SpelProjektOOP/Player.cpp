@@ -1,59 +1,73 @@
 #include "Player.h"
 #include "SFML\Window\Keyboard.hpp"
+#include "AnimatedSprite.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <iostream>
+#include "SFML\Graphics\Texture.hpp"
+#include "SFML\Window\Mouse.hpp"
 
 Player::Player()
 	: Creature()
 {
 	setSpeed(100.0f);
+
 }
 
 
 Player::~Player()
-{}
+{
+}
 
 
 void Player::update(sf::Time deltaTime)
 {
 	bool keyDown = false;
 	sf::Vector2f direction;
-	float radians = 0;
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
-		direction.y -= 1;
-		keyDown = true;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		direction.x -= 1;
-		keyDown = true;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
-		direction.y += 1;
-		keyDown = true;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		direction.x += 1;
-		keyDown = true;
-	}
+	if		(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { direction.y =  1; keyDown = true; }
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) { direction.y = -1; keyDown = true; }
+
+	if		(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) { direction.x = -1; keyDown = true; }
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) { direction.x =  1; keyDown = true; }
 
 	if (keyDown)
 	{
-		radians = atan2(direction.x, direction.y) + static_cast<float>(M_PI_2);
-		direction.x = -cos(radians);
-		direction.y = sin(radians);
+		float radians = atan2(direction.x, direction.y);
+		direction.x = sin(radians);
+		direction.y = -cos(radians);
 		move(getSpeed() * direction * deltaTime.asSeconds());
+
+		float degs = radians * 180 / M_PI;
+		float absDegs = abs(degs);
+		int anim = getSprite().getAnimation();
+
+		if		(absDegs < 22.5f)  { if (anim != 4) getSprite().setAnimation(4); }
+		else if (absDegs < 67.5f)  { if (anim != 3) getSprite().setAnimation(3); }
+		else if (absDegs < 112.5f) { if (anim != 2) getSprite().setAnimation(2); } 
+		else if (absDegs < 157.5f) { if (anim != 1) getSprite().setAnimation(1); }
+		else					   { if (anim != 0) getSprite().setAnimation(0); }
+
+		if (degs < 0) { setScale(sf::Vector2f(-1, 1)); }
+		else		  { setScale(sf::Vector2f( 1, 1)); }
+
+		getSprite().playAnimation(deltaTime);
 	}
 
-	//getSprite().playAnimation(deltaTime);
 }
 
-void Player::onCollisionEnter(const Entity& entity)
+void Player::onCollisionEnter(Entity* entity)
 {
 	std::cout << "Outch!\n";
+}
+
+void Player::onCollisionStay(Entity* entity) 
+{
+	//std::cout << "!";
+}
+
+
+void Player::onCollisionExit(Entity* entity)
+{
+	std::cout << "Whew!\n";
 }

@@ -29,8 +29,7 @@ void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	
 }
 
-
-void Entity::setSprite(sf::Sprite sprite)
+void Entity::setSprite(AnimatedSprite sprite)
 {
 	this->sprite = sprite;
 }
@@ -39,7 +38,7 @@ void Entity::setHitbox(sf::FloatRect hitbox)
 	this->hitbox = hitbox;
 }
 
-sf::Sprite& Entity::getSprite()
+AnimatedSprite& Entity::getSprite()
 {
 	return this->sprite;
 }
@@ -72,48 +71,38 @@ bool Entity::operator>(const Entity& entity) const
 	return this->id > entity.id;
 }
 
-void Entity::move(float offsetX, float offsetY)
-{
-	this->hitbox.left += offsetX;
-	this->hitbox.top += offsetY;
-	this->sprite.move(offsetX, offsetY);
-}
 void Entity::move(const sf::Vector2f &offset)
 {
 	this->hitbox.left += offset.x;
 	this->hitbox.top += offset.y;
 	this->sprite.move(offset);
 }
-
-void Entity::setRotation(float angle)
+void Entity::setScale(const sf::Vector2f& factors)
 {
-	sprite.setRotation(angle);
+	sprite.setScale(factors);
 }
-
 
 void Entity::collisionStart(Entity* entity)
 {
-	if (collisionList.exists(entity))
+	if (collisionList.exists(entity->getId()))
 	{
 		onCollisionStay(entity);
 	}
 	else
 	{
-		std::cout << getId() << " srt col with " << entity->getId() << "\n";
-		collisionList.add(entity);
+		collisionList.add(entity->getId());
 		onCollisionEnter(entity);
 	}
 }
 void Entity::collisionEnd(Entity* entity)
 {
-	if (collisionList.exists(entity))
+	if (collisionList.exists(entity->getId()))
 	{
-		std::cout << getId() << " end col with " << entity->getId() << "\n";
-		collisionList.remove(entity);
+		collisionList.remove(entity->getId());
 		onCollisionExit(entity);
 	}
 }
 
-void Entity::onCollisionEnter(const Entity* entity) {}
-void Entity::onCollisionStay(const Entity* entity)  {}
-void Entity::onCollisionExit(const Entity* entity)  {}
+void Entity::onCollisionEnter(Entity* entity) {}
+void Entity::onCollisionStay(Entity* entity)  {}
+void Entity::onCollisionExit(Entity* entity)  {}

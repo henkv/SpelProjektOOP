@@ -29,13 +29,33 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Game::update(sf::Time deltaTime)
 {
-	size_t length = entityList.length();
+	string eventName;
+	size_t x, y, i, ii;
 
-	for (size_t i = 0, ii; i < length; i++)
+
+	for (x = 0; x < entityMap.length(); x++)
 	{
-		for (ii = i + 1; ii < length; ii++)
+		for (y = 0; y < entityMap[x].length(); y++)
 		{
-			checkCollision(entityList[i], entityList[ii]);
+			for (i = 0; i < entityMap[x][y].length() - 1; i++)
+			{
+				for (ii = i + 1; ii < entityMap[x][y].length(); ii++)
+				{
+					checkCollision(entityList[i], entityList[ii]);
+				}
+			}
+		}
+	}
+
+	for (size_t i = 0, ii, iii; i < entityList.length(); i++)
+	{
+		while (entityList[i]->pollEvent(eventName))
+		{
+			if (eventName == "DEATH")
+			{
+				entityList.remove(entityList[i]);
+				i--;
+			}
 		}
 
 		entityList[i]->update(deltaTime);

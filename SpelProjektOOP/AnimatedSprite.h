@@ -12,7 +12,7 @@ class AnimatedSprite
 	sf::Vector2i currentFrame;
 	sf::Vector2i frameSize;
 	sf::IntRect animationBounds;
-	UList<sf::IntRect> animations;
+	List<sf::IntRect> animations;
 	size_t currentAnimation;
 
 	public:

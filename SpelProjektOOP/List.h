@@ -3,7 +3,7 @@
 using namespace std;
 
 template<typename T>
-class List
+class SortedList
 {
 	private:
 	T* elements;
@@ -22,8 +22,8 @@ class List
 		delete[] elements;
 		elements = newList;
 	}
-	public:
 
+	public:
 	int check(const T element) const
 	{
 		bool found = false;
@@ -83,13 +83,13 @@ class List
 		return pos;
 	}
 
-	List()
+	SortedList()
 	{
 		nrOf = 0;
 		cap = 10;
 		elements = new T[cap];
 	}
-	virtual ~List() { delete[] elements; }
+	virtual ~SortedList() { delete[] elements; }
 	
 	int length() const
 	{
@@ -144,8 +144,6 @@ class List
 		}
 	}
 
-	T& begin() { return elements[0]; }
-	T& end() { return elements[nrOf]; }
 
 	T& operator[](size_t pos)
 	{
@@ -155,11 +153,10 @@ class List
 	{
 		return elements[pos];
 	}
-
 };
 
 template<typename T>
-class UList
+class List
 {
 	private:
 	T* elements;
@@ -195,13 +192,13 @@ class UList
 		return pos;
 	}
 
-	UList()
+	List()
 	{
 		nrOf = 0;
 		cap = 10;
 		elements = new T[cap];
 	}
-	virtual ~UList() { delete[] elements; }
+	virtual ~List() { delete[] elements; }
 
 	int length() const
 	{
@@ -226,7 +223,6 @@ class UList
 			elements[i] = elements[i + 1];
 		}
 		nrOf--;
-		elements[nrOf] = NULL;
 	}
 
 	void remove(const T element)
@@ -240,13 +236,9 @@ class UList
 				elements[i] = elements[i + 1];
 			}
 			nrOf--;
-			elements[nrOf] = NULL;
 		}
 	}
-
-	T& begin() { return elements[0]; }
-	T& end() { return elements[nrOf]; }
-
+	
 	T& operator[](size_t pos)
 	{
 		return elements[pos];

@@ -12,7 +12,7 @@ Player::Player()
 	: Creature()
 {
 	setSpeed(100.0f);
-
+	goToTarget = false;
 }
 
 
@@ -34,6 +34,7 @@ void Player::update(sf::Time deltaTime)
 
 	if (keyDown)
 	{
+		goToTarget = false;
 		float radians = atan2(direction.x, direction.y);
 		direction.x = sin(radians);
 		direction.y = -cos(radians);
@@ -54,13 +55,44 @@ void Player::update(sf::Time deltaTime)
 
 		getSprite().playAnimation(deltaTime);
 	}
+	else if (goToTarget)
+	{
+		sf::Vector2f deltaPos = getPosition() - targetPos;
+
+		float radians = atan2(deltaPos.x, deltaPos.y);
+		direction.x = -sin(radians);
+		direction.y = -cos(radians);
+		move(getSpeed() * direction * deltaTime.asSeconds());
+
+		float degs = radians * 180 / M_PI;
+		float absDegs = abs(degs);
+		int anim = getSprite().getAnimation();
+
+		if (absDegs < 22.5f) { if (anim != 4) getSprite().setAnimation(4); }
+		else if (absDegs < 67.5f) { if (anim != 3) getSprite().setAnimation(3); }
+		else if (absDegs < 112.5f) { if (anim != 2) getSprite().setAnimation(2); }
+		else if (absDegs < 157.5f) { if (anim != 1) getSprite().setAnimation(1); }
+		else { if (anim != 0) getSprite().setAnimation(0); }
+
+		if (degs < 0) { setScale(sf::Vector2f(-1, 1)); }
+		else { setScale(sf::Vector2f(1, 1)); }
+
+		getSprite().playAnimation(deltaTime);
+	}
 
 }
 
 void Player::eat(Food* food)
 {
 	hunger += food->getKcal();
-	food->setScale(sf::Vector2f(0.25f, 0.25f));
+	food->addEvent("DEATH");
+}
+
+
+void Player::setTargetPos(sf::Vector2f targetPos)
+{
+	this->targetPos = targetPos;
+	goToTarget = true;
 }
 
 

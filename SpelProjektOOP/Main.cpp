@@ -7,16 +7,17 @@
 #include <iostream>
 #include <string>
 #include "Food.h"
+#include "SFML\Window\Mouse.hpp"
 using namespace std;
 
-
+#define SCALE 4
 
 int main()
 {
 	Game game;
 	sf::Clock clock;
 	sf::RenderWindow window(sf::VideoMode(400, 400), "Food Get!");
-	sf::View gameView(sf::Vector2f(0, 0), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
+	sf::View gameView(sf::Vector2f(0, 0), sf::Vector2f(window.getSize().x / SCALE, window.getSize().y / SCALE));
 
 
 	sf::Texture mapBg;
@@ -71,14 +72,14 @@ int main()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed) window.close();
-			if (event.type == sf::Event::Resized) gameView.setSize(event.size.width / 2.f, event.size.height / 2.f);
+			if (event.type == sf::Event::Closed)  window.close();
+			if (event.type == sf::Event::Resized) gameView.setSize(event.size.width / SCALE, event.size.height / SCALE);
+			if (event.type == sf::Event::MouseButtonPressed)  player->setTargetPos(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 		}
 
 		game.update(clock.restart());
-
 		gameView.setCenter(player->getSprite().getPosition());
-
+		
 		window.setView(gameView);
 		window.clear();
 		window.draw(game);

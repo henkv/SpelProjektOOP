@@ -21,7 +21,8 @@ class Entity :
 	sf::Vector2f hitboxBaseOffset;
 	sf::Vector2f hitboxOffset;
 	sf::FloatRect hitbox;
-	List<size_t> collisionList;
+	SortedList<size_t> collisionList;
+	List<string> eventPool;
 
 	public:
 	Entity();
@@ -44,6 +45,9 @@ class Entity :
 	void setOrigin(const sf::Vector2f& origin);
 	void setPosition(const sf::Vector2f& position);
 	const sf::Vector2f& getPosition() const;
+
+	bool pollEvent(string& eventName);
+	void addEvent(string eventName);
 
 	void collisionStart(Entity* entity);
 	void collisionEnd(Entity* entity);

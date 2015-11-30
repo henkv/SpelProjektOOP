@@ -2,12 +2,15 @@
 #include "SFML\Graphics\Drawable.hpp"
 #include "Entity.h"
 #include "List.h"
+#include "KeyValuePair.h"
 
 class Game :
 	public sf::Drawable
 {
 	private:
-	List<Entity*> entityList;
+	List<List<SortedList<Entity*>>> entityMap;
+
+	SortedList<Entity*> entityList;
 	sf::Sprite map;
 
 	public:

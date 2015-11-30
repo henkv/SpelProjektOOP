@@ -111,6 +111,26 @@ const sf::Vector2f& Entity::getPosition() const
 	return transform.getPosition();
 }
 
+
+bool Entity::pollEvent(string& eventName)
+{
+	bool polled = false;
+
+	if (eventPool.length() > 0)
+	{
+		polled = true;
+		eventName = eventPool[0];
+		eventPool.remove(0);
+	}
+
+	return polled;
+}
+
+void Entity::addEvent(string eventName)
+{
+	eventPool.add(eventName);
+}
+
 void Entity::collisionStart(Entity* entity)
 {
 	if (collisionList.exists(entity->getId()))
@@ -125,7 +145,7 @@ void Entity::collisionStart(Entity* entity)
 }
 void Entity::collisionEnd(Entity* entity)
 {
-	if (collisionList.exists(entity->getId()))
+	if (collisionList.length() > 0 && collisionList.exists(entity->getId()))
 	{
 		collisionList.remove(entity->getId());
 		onCollisionExit(entity);

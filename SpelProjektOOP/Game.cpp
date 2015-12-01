@@ -9,56 +9,51 @@ Game::Game()
 
 Game::~Game()
 {
-	for (size_t i = 0; i < entityList.length(); i++)
-	{
-		delete entityList[i];
-	}
+	
 }
 
 
 void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(map, states);
-
-	for (size_t i = 0; i < entityList.length(); i++)
+	
+	auto foodNode = foodList.getFirst();
+	while (foodNode != nullptr)
 	{
-		target.draw(*entityList[i], states);
+		target.draw(*foodNode->data, states);
+		foodNode = foodNode->getNext();
 	}
+
+	target.draw(*player, states);
 }
 
 
 void Game::update(sf::Time deltaTime)
 {
-	string eventName;
-	size_t x, y, i, ii;
+	string event;
+	auto foodNode = foodList.getFirst();
 
+	player->update(deltaTime);
 
-	for (x = 0; x < entityMap.length(); x++)
+	while (foodNode != nullptr)
 	{
-		for (y = 0; y < entityMap[x].length(); y++)
+		while (foodNode != nullptr && foodNode->data->pollEvent(event))
 		{
-			for (i = 0; i < entityMap[x][y].length() - 1; i++)
+			if (event == "DEATH")
 			{
-				for (ii = i + 1; ii < entityMap[x][y].length(); ii++)
-				{
-					checkCollision(entityList[i], entityList[ii]);
-				}
+				foodNode->remove();
+				delete foodNode->data;
+				auto   next = foodNode->getNext();
+				delete foodNode;
+				foodNode = next;
 			}
 		}
-	}
-
-	for (size_t i = 0, ii, iii; i < entityList.length(); i++)
-	{
-		while (entityList[i]->pollEvent(eventName))
+		if (foodNode != nullptr)
 		{
-			if (eventName == "DEATH")
-			{
-				entityList.remove(entityList[i]);
-				i--;
-			}
+			checkCollision(player, foodNode->data);
+			foodNode->data->update(deltaTime);
+			foodNode = foodNode->getNext();
 		}
-
-		entityList[i]->update(deltaTime);
 	}
 }
 
@@ -77,16 +72,15 @@ void Game::checkCollision(Entity* entityOne, Entity* entityTwo)
 	}
 }
 
-void Game::addEntity(Entity* entity)
+void Game::setPlayer(Player* player)
 {
-	entityList.add(entity);
+	this->player = player;
 }
-
-
-
-
-
-
+void Game::addFood(Food* food)
+{
+	auto node = new Node<Food*>(food);
+	foodList.insertFirst(node);
+}
 
 
 

@@ -10,7 +10,7 @@
 #include "SFML\Window\Mouse.hpp"
 using namespace std;
 
-#define SCALE 4
+#define SCALE 2.f
 
 int main()
 {
@@ -47,7 +47,7 @@ int main()
 	player->setSprite(playerSprite);
 	player->setOrigin(sf::Vector2f(8, 16));
 
-	game.addEntity(player);
+	game.setPlayer(player);
 
 
 	sf::Texture foodT;
@@ -57,14 +57,14 @@ int main()
 
 
 
-	for (size_t i = 0; i < 10; i++)
+	for (size_t i = 0; i < 100; i++)
 	{
 		Food* food = new Food();
 		food->getSprite().setTexture(foodT);
 		food->setHitbox(sf::FloatRect(12, 2, 18, 12));
 		food->setPosition(sf::Vector2f(rand() % 300, rand() % 300));
 		food->setOrigin(sf::Vector2f(17, 6));
-		game.addEntity(food);
+		game.addFood(food);
 	}
 
 	while (window.isOpen())

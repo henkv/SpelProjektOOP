@@ -1,16 +1,17 @@
 #pragma once
 #include "SFML\Graphics\Drawable.hpp"
+#include "LinkedList.h"
 #include "Entity.h"
-#include "List.h"
-#include "KeyValuePair.h"
+#include "Player.h"
+#include "Food.h"
 
 class Game :
 	public sf::Drawable
 {
 	private:
-	List<List<SortedList<Entity*>>> entityMap;
+	Player* player;
+	LinkedList<Food*> foodList;
 
-	SortedList<Entity*> entityList;
 	sf::Sprite map;
 
 	public:
@@ -21,7 +22,9 @@ class Game :
 	void update(sf::Time deltaTime);
 
 	void checkCollision(Entity* entityOne, Entity* entityTwo);
-	void addEntity(Entity* entity);
+
+	void setPlayer(Player* player);
+	void addFood(Food* food);
 
 	sf::Sprite& getMap();
 

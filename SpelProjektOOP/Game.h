@@ -1,5 +1,5 @@
 #pragma once
-#include "SFML\Graphics\Drawable.hpp"
+#include <SFML\Graphics\Drawable.hpp>
 #include "LinkedList.h"
 #include "Entity.h"
 #include "Player.h"
@@ -8,11 +8,15 @@
 class Game :
 	public sf::Drawable
 {
+	enum State { MAIN_MENU, PLAYING, GAME_OVER, HIGH_SCORE };
+
 	private:
 	Player* player;
 	LinkedList<Food*> foodList;
-
 	sf::Sprite map;
+	State state;
+
+
 
 	public:
 	Game();
@@ -27,6 +31,15 @@ class Game :
 	void addFood(Food* food);
 
 	sf::Sprite& getMap();
+
+
+
+
+	void gameOver();
+	void gameStart();
+
+
+	void showMainMenu();
 
 };
 

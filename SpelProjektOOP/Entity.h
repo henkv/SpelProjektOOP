@@ -1,11 +1,11 @@
 #pragma once
-#include "SFML\Graphics\Drawable.hpp"
-#include "SFML\Graphics\RenderTarget.hpp"
-#include "SFML\Graphics\RenderStates.hpp"
-#include "SFML\Graphics\Transformable.hpp"
-#include "SFML\Graphics\Sprite.hpp"
-#include "SFML\Graphics\Rect.hpp"
-#include "SFML\System\Time.hpp"
+#include <SFML\Graphics\Drawable.hpp>
+#include <SFML\Graphics\RenderTarget.hpp>
+#include <SFML\Graphics\RenderStates.hpp>
+#include <SFML\Graphics\Transformable.hpp>
+#include <SFML\Graphics\Sprite.hpp>
+#include <SFML\Graphics\Rect.hpp>
+#include <SFML\System\Time.hpp>
 #include "AnimatedSprite.h"
 #include "List.h"
 

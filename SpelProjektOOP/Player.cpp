@@ -1,18 +1,25 @@
-#include "Player.h"
-#include "SFML\Window\Keyboard.hpp"
-#include "AnimatedSprite.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <iostream>
-#include "SFML\Graphics\Texture.hpp"
-#include "SFML\Window\Mouse.hpp"
+#include <sstream>
+
+#include <SFML\Graphics\Texture.hpp>
+#include <SFML\Window\Keyboard.hpp>
+#include <SFML\Window\Mouse.hpp>
+#include <SFML\Graphics\CircleShape.hpp>
+
+#include "AnimatedSprite.h"
+#include "Player.h"
 #include "Game.h"
+
+
 
 Player::Player()
 	: Creature()
 {
 	setSpeed(100.0f);
 	goToTarget = false;
+	hunger = 90.0f;
 }
 
 
@@ -23,6 +30,8 @@ Player::~Player()
 
 void Player::update(sf::Time deltaTime)
 {
+	hunger += deltaTime.asSeconds();
+
 	bool keyDown = false;
 	sf::Vector2f direction;
 	
@@ -44,9 +53,9 @@ void Player::update(sf::Time deltaTime)
 		float absDegs = abs(degs);
 		int anim = getSprite().getAnimation();
 
-		if		(absDegs < 22.5f)  { if (anim != 4) getSprite().setAnimation(4); }
-		else if (absDegs < 67.5f)  { if (anim != 3) getSprite().setAnimation(3); }
-		else if (absDegs < 112.5f) { if (anim != 2) getSprite().setAnimation(2); } 
+		if		(absDegs <  22.5f) { if (anim != 4) getSprite().setAnimation(4); }
+		else if (absDegs <  67.5f) { if (anim != 3) getSprite().setAnimation(3); }
+		else if (absDegs < 112.5f) { if (anim != 2) getSprite().setAnimation(2); }
 		else if (absDegs < 157.5f) { if (anim != 1) getSprite().setAnimation(1); }
 		else					   { if (anim != 0) getSprite().setAnimation(0); }
 
@@ -55,36 +64,11 @@ void Player::update(sf::Time deltaTime)
 
 		getSprite().playAnimation(deltaTime);
 	}
-	else if (goToTarget)
-	{
-		sf::Vector2f deltaPos = getPosition() - targetPos;
-
-		float radians = atan2(deltaPos.x, deltaPos.y);
-		direction.x = -sin(radians);
-		direction.y = -cos(radians);
-		move(getSpeed() * direction * deltaTime.asSeconds());
-
-		float degs = radians * 180 / M_PI;
-		float absDegs = abs(degs);
-		int anim = getSprite().getAnimation();
-
-		if (absDegs < 22.5f) { if (anim != 4) getSprite().setAnimation(4); }
-		else if (absDegs < 67.5f) { if (anim != 3) getSprite().setAnimation(3); }
-		else if (absDegs < 112.5f) { if (anim != 2) getSprite().setAnimation(2); }
-		else if (absDegs < 157.5f) { if (anim != 1) getSprite().setAnimation(1); }
-		else { if (anim != 0) getSprite().setAnimation(0); }
-
-		if (degs < 0) { setScale(sf::Vector2f(-1, 1)); }
-		else { setScale(sf::Vector2f(1, 1)); }
-
-		getSprite().playAnimation(deltaTime);
-	}
-
 }
 
 void Player::eat(Food* food)
 {
-	hunger += food->getKcal();
+	hunger -= food->getKcal();
 	food->addEvent("DEATH");
 }
 
@@ -93,6 +77,24 @@ void Player::setTargetPos(sf::Vector2f targetPos)
 {
 	this->targetPos = targetPos;
 	goToTarget = true;
+}
+
+
+
+void Player::setHunger(float hunger)
+{
+	this->hunger = hunger;
+}
+
+float Player::getHunger() const
+{
+	return hunger;
+}
+string Player::getHungerString() const
+{
+	stringstream stream;
+	stream << hunger;
+	return stream.str();
 }
 
 

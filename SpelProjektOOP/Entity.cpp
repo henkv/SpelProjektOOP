@@ -1,6 +1,8 @@
-#include "Entity.h"
-#include "SFML\Graphics\RectangleShape.hpp"
 #include <iostream>
+
+#include <SFML\Graphics\RectangleShape.hpp>
+
+#include "Entity.h"
 
 #define DEBUG
 

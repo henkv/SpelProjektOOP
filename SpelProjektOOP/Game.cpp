@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "SFML\Graphics\RenderTarget.hpp"
+#include <SFML\Graphics\RenderTarget.hpp>
 #include <iostream>
 
 Game::Game()
@@ -24,7 +24,8 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		foodNode = foodNode->getNext();
 	}
 
-	target.draw(*player, states);
+	if (player != nullptr)
+		target.draw(*player, states);
 }
 
 
@@ -33,7 +34,14 @@ void Game::update(sf::Time deltaTime)
 	string event;
 	auto foodNode = foodList.getFirst();
 
-	player->update(deltaTime);
+	if (player != nullptr)
+	{
+		player->update(deltaTime);
+		if (player->getHunger() > 100.0f)
+		{
+			gameOver();
+		}
+	}
 
 	while (foodNode != nullptr)
 	{
@@ -50,7 +58,9 @@ void Game::update(sf::Time deltaTime)
 		}
 		if (foodNode != nullptr)
 		{
-			checkCollision(player, foodNode->data);
+			if (player != nullptr)
+				checkCollision(player, foodNode->data);
+
 			foodNode->data->update(deltaTime);
 			foodNode = foodNode->getNext();
 		}
@@ -72,10 +82,13 @@ void Game::checkCollision(Entity* entityOne, Entity* entityTwo)
 	}
 }
 
+
 void Game::setPlayer(Player* player)
 {
 	this->player = player;
 }
+
+
 void Game::addFood(Food* food)
 {
 	auto node = new Node<Food*>(food);
@@ -83,10 +96,25 @@ void Game::addFood(Food* food)
 }
 
 
-
-
-
 sf::Sprite& Game::getMap()
 {
 	return map;
+}
+
+
+void Game::gameOver()
+{
+
+}
+
+
+void Game::gameStart()
+{
+
+}
+
+
+void Game::showMainMenu()
+{
+	state = State::MAIN_MENU;
 }

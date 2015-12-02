@@ -6,7 +6,7 @@ class Player :
 	public Creature
 {
 	private:
-	int hunger;
+	float hunger;
 	sf::Vector2f targetPos;
 	bool goToTarget;
 
@@ -17,9 +17,12 @@ class Player :
 	void update(sf::Time deltaTime);
 
 	void eat(Food* food);
-
-
 	void setTargetPos(sf::Vector2f targetPos);
+
+
+	void setHunger(float hunger);
+	float getHunger() const;
+	string getHungerString() const;
 
 	void onCollisionEnter(Entity* entity);
 	void onCollisionStay(Entity* entity);

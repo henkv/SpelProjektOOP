@@ -2,7 +2,9 @@
 
 
 Food::Food()
-{}
+{
+	kcal = 0;
+}
 
 
 Food::~Food()

@@ -42,6 +42,9 @@
     <ClCompile Include="EntityList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WeightedMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeightedMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

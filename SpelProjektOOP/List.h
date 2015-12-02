@@ -141,7 +141,6 @@ class SortedList
 				elements[i] = elements[i + 1];
 			}
 			nrOf--;
-			elements[nrOf] = NULL;
 		}
 	}
 
@@ -198,6 +197,8 @@ class List
 		nrOf = 0;
 		cap = 10;
 		elements = new T[cap];
+
+
 	}
 	virtual ~List() { delete[] elements; }
 

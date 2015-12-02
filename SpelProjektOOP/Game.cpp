@@ -24,8 +24,7 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		foodNode = foodNode->getNext();
 	}
 
-	if (player != nullptr)
-		target.draw(*player, states);
+	target.draw(*player, states);
 }
 
 
@@ -34,13 +33,10 @@ void Game::update(sf::Time deltaTime)
 	string event;
 	auto foodNode = foodList.getFirst();
 
-	if (player != nullptr)
+	player->update(deltaTime);
+	if (player->getHunger() > 100.0f)
 	{
-		player->update(deltaTime);
-		if (player->getHunger() > 100.0f)
-		{
-			gameOver();
-		}
+		gameOver();
 	}
 
 	while (foodNode != nullptr)
@@ -58,8 +54,7 @@ void Game::update(sf::Time deltaTime)
 		}
 		if (foodNode != nullptr)
 		{
-			if (player != nullptr)
-				checkCollision(player, foodNode->data);
+			checkCollision(player, foodNode->data);
 
 			foodNode->data->update(deltaTime);
 			foodNode = foodNode->getNext();

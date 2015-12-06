@@ -20,7 +20,7 @@ class Game :
 
 	public:
 	Game();
-	~Game();
+	virtual ~Game();
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	void update(sf::Time deltaTime);

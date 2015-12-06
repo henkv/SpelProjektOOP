@@ -4,8 +4,8 @@ template<typename T>
 class Node
 {
 	private:
-	Node<T>* prev = nullptr;
-	Node<T>* next = nullptr;
+	Node<T>* prev_ = nullptr;
+	Node<T>* next_ = nullptr;
 
 	public:
 	T data;
@@ -19,46 +19,44 @@ class Node
 	{
 		if (node != nullptr)
 		{
-			node->next = this;									// prev   node-->this // 
-			node->prev = this->prev;							// prev<--node-->this //
-			if (node->prev != nullptr) node->prev->next = node; // prev<->node-->this //
+			node->next = this;
+			node->prev = prev_;
+			if (node->prev != nullptr) 
+				node->prev->next = node;
 		}
 
-		this->prev = node;									// prev<->node<->this // 
+		prev_ = node;
 	}
 
 	void append(Node<T>* node)
 	{
 		if (node != nullptr)
 		{
-			node->prev = this;									// this<--node   next // 
-			node->next = this->next;							// this<--node-->next // 
-			if (node->next != nullptr) node->next->prev = node; // this<--node<->next // 
+			node->prev = this
+				node->next = next_;
+			if (node->next != nullptr) 
+				node->next->prev = node; 
 		}
 
-		this->next = node;									// this<->node<->next // 
+		next_ = node;
 	}
 
 	void remove()
 	{
-
-		/*
-			prev<->this<->next
-			prev--------->next
-			prev<-------->next
-		*/
-		if (this->prev != nullptr) this->prev->next = this->next; 
-		if (this->next != nullptr) this->next->prev = this->prev;
+		if (prev_ != nullptr)
+			prev_->next = next_;
+		if (next_ != nullptr)
+			next_->prev = prev_;
 	}
 	
 	Node<T>* getPrev() const
 	{
-		return prev;
+		return prev_;
 	}
 
 	Node<T>* getNext() const
 	{
-		return next;
+		return next_;
 	}
 };
 
@@ -66,18 +64,18 @@ template<typename T>
 class LinkedList
 {
 	private:
-	Node<T> startNode;
+	Node<T> startNode_;
 
 	public:
 
 	Node<T>* getFirst() const
 	{
-		return startNode.getNext();
+		return startNode_.getNext();
 	}
 
 	void insertFirst(Node<T>* node)
 	{
-		startNode.append(node);
+		startNode_.append(node);
 	}
 };
 

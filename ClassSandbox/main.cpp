@@ -12,12 +12,10 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Sandbox");
-
-	Game game;
 	sf::Clock clock;
 	sf::Event event;
 
-	game.setWindowSize(sf::Vector2f(800, 800));
+	Game game;
 
 	while (window.isOpen())
 	{
@@ -30,12 +28,16 @@ int main()
 					break;
 
 				case sf::Event::Resized: 
-					game.setWindowSize(sf::Vector2f(event.size.width, event.size.height));
+					//game.setWindowSize(sf::Vector2f(event.size.width, event.size.height));
+					break;
+
+				case sf::Event::MouseButtonPressed:
+					game.setMousePos(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+					
 					break;
 			}
 		}
 
-		game.setMousePos(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 		game.update(clock.restart());
 
 		window.clear();

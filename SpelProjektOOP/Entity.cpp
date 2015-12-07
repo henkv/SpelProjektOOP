@@ -1,172 +1,74 @@
-#include <iostream>
-
-#include <SFML\Graphics\RectangleShape.hpp>
-
 #include "Entity.h"
 
-#define DEBUG
-
-
-size_t Entity::nextId = 0;
 
 Entity::Entity()
-{
-	this->id = this->nextId++;
-}
+{}
+
 Entity::~Entity()
 {}
 
-void Entity::draw(sf::RenderTarget &target, 
+
+
+void Entity::draw(sf::RenderTarget& target,
 				  sf::RenderStates states) const
 {
-	target.draw(sprite, states);
+	target.draw(sprite_, states);
+}
+
+void Entity::onCollision(Entity& entity)
+{}
 
 
-	#ifdef DEBUG
 
-	sf::RectangleShape origin;
-	origin.setFillColor(sf::Color::Green);
-	origin.setSize(sf::Vector2f(1, 1));
-	origin.setPosition(transform.getPosition());
-	origin.setFillColor(sf::Color::Magenta);
+Hitbox& Entity::getHitbox()
+{
+	return hitbox_;
+}
 
-	target.draw(origin);
-
-	sf::RectangleShape rect;
-	rect.setOutlineColor(sf::Color::Green);
-	rect.setOutlineThickness(0.5f);
-	rect.setSize(sf::Vector2f(hitbox.width, hitbox.height));
-	rect.setPosition(sf::Vector2f(hitbox.left, hitbox.top));
-	rect.setFillColor(sf::Color::Transparent);
-
-	target.draw(rect);
-	#endif	
+sf::Sprite& Entity::getSprite()
+{
+	return sprite_;
 }
 
 
-void Entity::setSprite(const AnimatedSprite& sprite)
+
+Hitbox const& Entity::getHitbox() const
 {
-	this->sprite = sprite;
+	return hitbox_;
 }
-void Entity::setHitbox(sf::FloatRect hitbox)
+
+sf::Sprite const& Entity::getSprite() const
 {
-	this->hitbox = hitbox;
-	hitboxBaseOffset.x = hitbox.left;
-	hitboxBaseOffset.y = hitbox.top;
-	hitbox.left = hitboxPosition.x + hitboxOffset.x + hitboxBaseOffset.x;
-	hitbox.top = hitboxPosition.y + hitboxOffset.y + hitboxBaseOffset.y;
+	return sprite_;
+}
+
+sf::Vector2f const& Entity::getPosition() const
+{
+	return hitbox_.getPosition();
 }
 
 
-size_t Entity::getId() const
+
+void Entity::setPosition(sf::Vector2f const& position)
 {
-	return this->id;
+	hitbox_.setPosition(position);
+	sprite_.setPosition(position);
 }
-const sf::FloatRect& Entity::getHitbox() const
+
+void Entity::move(sf::Vector2f const& offset)
 {
-	return this->hitbox;
-}
-const AnimatedSprite& Entity::getSprite() const
-{
-	return this->sprite;
-}
-AnimatedSprite& Entity::getSprite() 
-{
-	return this->sprite;
+	hitbox_.move(offset);
+	sprite_.move(offset);
 }
 
 
-void Entity::move(const sf::Vector2f &offset)
-{
-	transform.move(offset);
-	sprite.move(offset);
 
-	hitboxPosition += offset;
-	hitbox.left = hitboxPosition.x + hitboxOffset.x + hitboxBaseOffset.x;
-	hitbox.top = hitboxPosition.y + hitboxOffset.y + hitboxBaseOffset.y;
-}
-void Entity::setScale(const sf::Vector2f& factors)
+bool Entity::pollEvent(Event& event)
 {
-	transform.setScale(factors);
-	sprite.setScale(factors);
-}
-void Entity::setOrigin(const sf::Vector2f& origin)
-{
-	transform.setOrigin(origin);
-	sprite.setOrigin(origin);
-	hitboxOffset.x = -origin.x;
-	hitboxOffset.y = -origin.y;
-	hitbox.left = hitboxPosition.x + hitboxOffset.x + hitboxBaseOffset.x;
-	hitbox.top = hitboxPosition.y + hitboxOffset.y + hitboxBaseOffset.y;
-}
-void Entity::setPosition(const sf::Vector2f& position)
-{
-	transform.setPosition(position);
-	sprite.setPosition(position);
-	hitboxPosition.x = position.x;
-	hitboxPosition.y = position.y;
-	hitbox.left = hitboxPosition.x + hitboxOffset.x;
-	hitbox.top = hitboxPosition.y + hitboxOffset.y;
-}
-const sf::Vector2f& Entity::getPosition() const
-{
-	return transform.getPosition();
+	return eventQueue_.pop(event);
 }
 
-
-bool Entity::pollEvent(string& eventName)
+void Entity::pushEvent(Event event)
 {
-	bool polled = false;
-
-	if (eventPool.length() > 0)
-	{
-		polled = true;
-		eventName = eventPool[0];
-		eventPool.remove(0);
-	}
-
-	return polled;
-}
-
-void Entity::addEvent(string eventName)
-{
-	eventPool.add(eventName);
-}
-
-void Entity::collisionStart(Entity* entity)
-{
-	if (collisionList.exists(entity->getId()))
-	{
-		onCollisionStay(entity);
-	}
-	else
-	{
-		collisionList.add(entity->getId());
-		onCollisionEnter(entity);
-	}
-}
-void Entity::collisionEnd(Entity* entity)
-{
-	if (collisionList.length() > 0 && collisionList.exists(entity->getId()))
-	{
-		collisionList.remove(entity->getId());
-		onCollisionExit(entity);
-	}
-}
-void Entity::onCollisionEnter(Entity* entity) {}
-void Entity::onCollisionStay(Entity* entity)  {}
-void Entity::onCollisionExit(Entity* entity)  {}
-
-
-bool Entity::operator==(const Entity& entity) const
-{
-	return this->id == entity.id;
-}
-bool Entity::operator<(const Entity& entity) const
-{
-	return this->id < entity.id;
-}
-bool Entity::operator>(const Entity& entity) const
-{
-	return this->id > entity.id;
+	eventQueue_.push(event);
 }

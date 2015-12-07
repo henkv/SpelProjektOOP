@@ -1,45 +1,29 @@
 #pragma once
 #include <SFML\Graphics\Drawable.hpp>
-#include "LinkedList.h"
-#include "Entity.h"
-#include "Player.h"
-#include "Food.h"
+#include <SFML\System\Time.hpp>
+#include "GameState.h"
+#include "PlayGameState.h"
+#include "MenuGameState.h"
 
 class Game :
-	public sf::Drawable
+	public sf::Drawable,
+	public GameState::Observer
 {
-	enum State { MAIN_MENU, PLAYING, GAME_OVER, HIGH_SCORE };
-
 	private:
-	Player* player;
-	LinkedList<Food*> foodList;
-	sf::Sprite map;
-	State state;
-
-
+	PlayGameState playState_;
+	MenuGameState menuState_;
+	GameState* currentState_;
 
 	public:
 	Game();
 	virtual ~Game();
 
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	void update(sf::Time deltaTime);
+	virtual void draw(sf::RenderTarget& target, 
+			  sf::RenderStates states) const;
+	virtual void update(sf::Time const& deltaTime);
+	virtual void setMousePos(sf::Vector2f const& mousePos);
+	virtual void setWindowSize(sf::Vector2f const& windowSize);
 
-	void checkCollision(Entity* entityOne, Entity* entityTwo);
-
-	void setPlayer(Player* player);
-	void addFood(Food* food);
-
-	sf::Sprite& getMap();
-
-
-
-
-	void gameOver();
-	void gameStart();
-
-
-	void showMainMenu();
-
+	void onNotify(GameState::Event event, GameState* caller);
 };
 

@@ -1,24 +1,7 @@
-#pragma once
-#include "Node.h"
+#include "LinkedList.h"
+
 
 template<typename T>
-class LinkedList
-{
-	private:
-	Node<T> startNode_;
-
-	public:
-	LinkedList();
-	virtual ~LinkedList();
-
-	void clear();
-
-	Node<T>* getFirst() const;
-	void insertFirst(Node<T>* node);
-	void insertFirst(T const& data);
-
-};
-
 
 template<typename T>
 LinkedList<T>::LinkedList()
@@ -63,7 +46,7 @@ void LinkedList<T>::insertFirst(Node<T>* node)
 	startNode_.append(node);
 }
 template<typename T>
-void LinkedList<T>::insertFirst(T const& data)
+void LinkedList<T>::insertFirst(T data)
 {
 	startNode_.append(new Node<T>(data));
 }

@@ -2,60 +2,46 @@
 #include <SFML\Graphics\Drawable.hpp>
 #include <SFML\Graphics\RenderTarget.hpp>
 #include <SFML\Graphics\RenderStates.hpp>
-#include <SFML\Graphics\Transformable.hpp>
 #include <SFML\Graphics\Sprite.hpp>
-#include <SFML\Graphics\Rect.hpp>
 #include <SFML\System\Time.hpp>
-#include "AnimatedSprite.h"
-#include "List.h"
+#include "Hitbox.h"
+#include "Queue.h"
 
-class Entity : 
+class Entity :
 	public sf::Drawable
 {
+	public:
+	static enum Event
+	{
+		DEATH
+	};
+
 	private:
-	static size_t nextId;
-	size_t id;
-	AnimatedSprite sprite;
-	sf::Transformable transform;
-	sf::Vector2f hitboxPosition;
-	sf::Vector2f hitboxBaseOffset;
-	sf::Vector2f hitboxOffset;
-	sf::FloatRect hitbox;
-	SortedList<size_t> collisionList;
-	List<string> eventPool;
+	Hitbox hitbox_;
+	sf::Sprite sprite_;
+	Queue<Event> eventQueue_;
 
 	public:
 	Entity();
 	virtual ~Entity();
 
-	virtual void update(sf::Time deltaTime) = 0;
-	virtual void draw(sf::RenderTarget &target, 
+	virtual void draw(sf::RenderTarget& target,
 					  sf::RenderStates states) const;
+	virtual void update(sf::Time const& deltaTime) = 0;
+	virtual void onCollision(Entity& entity);
 
-	void setSprite(const AnimatedSprite& sprite);
-	void setHitbox(sf::FloatRect hitbox);
+	Hitbox& getHitbox();
+	sf::Sprite& getSprite();
 
-	size_t getId() const;
-	const sf::FloatRect& getHitbox() const;
-	const AnimatedSprite& getSprite() const;
-	AnimatedSprite& getSprite();
+	Hitbox const& getHitbox() const;
+	sf::Sprite const& getSprite() const;
+	sf::Vector2f const& getPosition() const;
 
-	void move(const sf::Vector2f& offset);
-	void setScale(const sf::Vector2f& factors);
-	void setOrigin(const sf::Vector2f& origin);
-	void setPosition(const sf::Vector2f& position);
-	const sf::Vector2f& getPosition() const;
+	void setPosition(sf::Vector2f const& position);
+	void move(sf::Vector2f const& offset);
 
-	bool pollEvent(string& eventName);
-	void addEvent(string eventName);
+	bool pollEvent(Event& event);
+	void pushEvent(Event event);
 
-	void collisionStart(Entity* entity);
-	void collisionEnd(Entity* entity);
-	virtual void onCollisionEnter(Entity* entity);
-	virtual void onCollisionStay(Entity* entity);
-	virtual void onCollisionExit(Entity* entity);
-
-	bool operator==(const Entity& entity) const;
-	bool operator<(const Entity& entity) const;
-	bool operator>(const Entity& entity) const;
 };
+

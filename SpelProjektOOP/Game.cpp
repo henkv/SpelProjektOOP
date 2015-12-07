@@ -1,115 +1,58 @@
 #include "Game.h"
-#include <SFML\Graphics\RenderTarget.hpp>
+#include "PlayGameState.h"
+#include "MenuGameState.h"
 #include <iostream>
+using namespace std;
+
 
 Game::Game()
 {
+	playState_.addObserver(this);
+	menuState_.addObserver(this);
+	currentState_ = &menuState_;
 }
-
-
 Game::~Game()
 {
-	
 }
 
 
-void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Game::draw(sf::RenderTarget& target,
+				sf::RenderStates states) const
 {
-	target.draw(map, states);
-	
-	auto foodNode = foodList.getFirst();
-	while (foodNode != nullptr)
-	{
-		target.draw(*foodNode->data, states);
-		foodNode = foodNode->getNext();
-	}
-
-	target.draw(*player, states);
+	target.draw(*currentState_, states);
+}
+void Game::update(sf::Time const& deltaTime)
+{
+	currentState_->update(deltaTime);
 }
 
 
-void Game::update(sf::Time deltaTime)
+void Game::setMousePos(sf::Vector2f const& mousePos)
 {
-	string event;
-	auto foodNode = foodList.getFirst();
+	currentState_->setMousePos(mousePos);
+}
+void Game::setWindowSize(sf::Vector2f const& size)
+{
+	menuState_.setWindowSize(size);
+	playState_.setWindowSize(size);
+}
 
-	player->update(deltaTime);
-	if (player->getHunger() > 100.0f)
-	{
-		gameOver();
-	}
 
-	while (foodNode != nullptr)
+void Game::onNotify(GameState::Event event, GameState* caller)
+{
+	if (event == GameState::Event::END)
 	{
-		while (foodNode != nullptr && foodNode->data->pollEvent(event))
+		if (caller == &menuState_)
 		{
-			if (event == "DEATH")
-			{
-				foodNode->remove();
-				delete foodNode->data;
-				auto   next = foodNode->getNext();
-				delete foodNode;
-				foodNode = next;
-			}
+			cout << "State Transition: Menu > Play" << endl;
+			currentState_ = &playState_;
+			currentState_->restart();
 		}
-		if (foodNode != nullptr)
+		else if (caller == &playState_)
 		{
-			checkCollision(player, foodNode->data);
-
-			foodNode->data->update(deltaTime);
-			foodNode = foodNode->getNext();
+			cout << "State Transition: Play > Menu" << endl;
+			currentState_ = &menuState_;
+			currentState_->restart();
 		}
 	}
-}
-
-
-void Game::checkCollision(Entity* entityOne, Entity* entityTwo)
-{
-	if (entityOne->getHitbox().intersects(entityTwo->getHitbox()))
-	{
-		entityOne->collisionStart(entityTwo);
-		entityTwo->collisionStart(entityOne);
-	}
-	else
-	{
-		entityOne->collisionEnd(entityTwo);
-		entityTwo->collisionEnd(entityOne);
-	}
-}
-
-
-void Game::setPlayer(Player* player)
-{
-	this->player = player;
-}
-
-
-void Game::addFood(Food* food)
-{
-	auto node = new Node<Food*>(food);
-	foodList.insertFirst(node);
-}
-
-
-sf::Sprite& Game::getMap()
-{
-	return map;
-}
-
-
-void Game::gameOver()
-{
-
-}
-
-
-void Game::gameStart()
-{
-
-}
-
-
-void Game::showMainMenu()
-{
-	state = State::MAIN_MENU;
 }

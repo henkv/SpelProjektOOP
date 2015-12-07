@@ -1,25 +1,28 @@
 #include "Food.h"
 
 
+
 Food::Food()
 {
-	kcal = 0;
+	kcal_ = 0;
 }
-
 
 Food::~Food()
 {}
 
-void Food::update(sf::Time deltaTime)
-{
 
-}
+
+void Food::update(sf::Time const& deltaTime)
+{}
+
+
 
 int Food::getKcal() const
 {
-	return kcal;
+	return kcal_;
 }
+
 void Food::setKcal(int kcal)
 {
-	this->kcal = kcal;
+	kcal_ = kcal;
 }

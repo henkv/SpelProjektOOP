@@ -35,7 +35,3 @@ void MenuGameState::draw(sf::RenderTarget& target,
 	target.setView(menuView_);
 	target.draw(playButton_, states);
 }
-
-void MenuGameState::setWindowSize(sf::Vector2f const& size)
-{
-}

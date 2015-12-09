@@ -22,7 +22,6 @@ class Game :
 			  sf::RenderStates states) const;
 	virtual void update(sf::Time const& deltaTime);
 	virtual void setMousePos(sf::Vector2f const& mousePos);
-	virtual void setWindowSize(sf::Vector2f const& windowSize);
 
 	void onNotify(GameState::Event event, GameState* caller);
 };

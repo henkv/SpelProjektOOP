@@ -77,20 +77,16 @@ void PlayGameState::draw(sf::RenderTarget& target,
 	playArea.setPosition(sf::Vector2f());
 	playArea.setOrigin(sf::Vector2f(150, 150) / 2.f);
 
-	//target.draw(playArea, states);
-	//drawFoodsDebug(target, states);
-	//drawPlayerDebug(target, states);
-	//drawEnemiesDebug(target, states);
+	target.draw(playArea, states);
+	drawFoodsDebug(target, states);
+	drawPlayerDebug(target, states);
+	drawEnemiesDebug(target, states);
 
 	target.draw(firstLayer_, states);
 	target.draw(secondLayer_, states);
 	target.draw(thirdLayer_, states);
 }
 
-void PlayGameState::setWindowSize(sf::Vector2f const& size)
-{
-
-}
 
 
 void PlayGameState::checkCollision(Entity& entityOne, Entity& entityTwo)

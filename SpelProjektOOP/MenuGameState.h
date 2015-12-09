@@ -3,14 +3,21 @@
 #include "LinkedList.h"
 #include "Button.h"
 #include <SFML\Graphics\Texture.hpp>
+#include <SFML\Graphics\Font.hpp>
+#include <SFML\Graphics\Text.hpp>
 
 class MenuGameState :
 	public GameState
 {
 	private:
+	sf::Font font_;
 	sf::Texture playTexture_;
 
 	sf::View menuView_;
+
+	sf::Text highscore_;
+	int highScoreValue_;
+	string highscoreHolder_;
 
 	Button playButton_;
 
@@ -23,7 +30,10 @@ class MenuGameState :
 	virtual void draw(sf::RenderTarget& target,
 					  sf::RenderStates states) const;
 
-	virtual void setWindowSize(sf::Vector2f const& size);
+	int getHighscoreValue() const;
+	string getHighscoreHolder() const;
 
+	void setHighscoreValue(int highscoreValue);
+	void setHighscoreHolder(string highscoreHolder);
 };
 

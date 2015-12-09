@@ -17,7 +17,6 @@ int main()
 	sf::Clock clock;
 	sf::Event event;
 
-	game.setWindowSize(sf::Vector2f(800, 800));
 
 	while (window.isOpen())
 	{
@@ -30,7 +29,6 @@ int main()
 					break;
 
 				case sf::Event::Resized: 
-					game.setWindowSize(sf::Vector2f(event.size.width, event.size.height));
 					break;
 			}
 		}

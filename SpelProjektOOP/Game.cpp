@@ -31,11 +31,6 @@ void Game::setMousePos(sf::Vector2f const& mousePos)
 {
 	currentState_->setMousePos(mousePos);
 }
-void Game::setWindowSize(sf::Vector2f const& size)
-{
-	menuState_.setWindowSize(size);
-	playState_.setWindowSize(size);
-}
 
 
 void Game::onNotify(GameState::Event event, GameState* caller)

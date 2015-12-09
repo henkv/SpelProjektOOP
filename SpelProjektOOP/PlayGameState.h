@@ -43,10 +43,7 @@ class PlayGameState :
 	virtual void update(sf::Time const& deltaTime);
 	virtual void draw(sf::RenderTarget& target,
 					  sf::RenderStates states) const;
-
-	virtual void setWindowSize(sf::Vector2f const& size);
-
-
+	
 	void checkCollision(Entity& entityOne, Entity& entityTwo);
 
 	void spawnFood();

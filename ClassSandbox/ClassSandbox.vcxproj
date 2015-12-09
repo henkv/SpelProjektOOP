@@ -83,55 +83,6 @@
       <AdditionalDependencies>sfml-window-d.lib;sfml-graphics-d.lib;sfml-systems-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="DirectionalInput.cpp" />
-    <ClCompile Include="DrawLayer.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Food.cpp" />
-    <ClCompile Include="Game.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="Hitbox.cpp" />
-    <ClCompile Include="LinkedList.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MenuGameState.cpp" />
-    <ClCompile Include="Node.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Observer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayGameState.cpp" />
-    <ClCompile Include="Queue.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="DirectionalInput.h" />
-    <ClInclude Include="DrawLayer.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Food.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameState.h" />
-    <ClInclude Include="Hitbox.h" />
-    <ClInclude Include="LinkedList.h" />
-    <ClInclude Include="MenuGameState.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="Observer.h" />
-    <ClInclude Include="Physics.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayGameState.h" />
-    <ClInclude Include="Queue.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -10,6 +10,15 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FileHandler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.dat" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6C3DC928-F6A3-40CC-93E0-23183B3DFE0F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

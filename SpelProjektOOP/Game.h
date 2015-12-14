@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "PlayGameState.h"
 #include "MenuGameState.h"
+#include <SFML\Window\Event.hpp>
 
 class Game :
 	public sf::Drawable,
@@ -13,6 +14,10 @@ class Game :
 	PlayGameState playState_;
 	MenuGameState menuState_;
 	GameState* currentState_;
+
+	bool newHighscore_;
+	int highscore_;
+	string nameHighscore_;
 
 	public:
 	Game();
@@ -24,5 +29,9 @@ class Game :
 	virtual void setMousePos(sf::Vector2f const& mousePos);
 
 	void onNotify(GameState::Event event, GameState* caller);
+	void onWindowEvent(sf::Event event);
+
+	void loadHighscore();
+	void saveHighscore();
 };
 

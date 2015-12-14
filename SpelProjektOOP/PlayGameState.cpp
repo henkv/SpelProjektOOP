@@ -3,6 +3,7 @@
 #include <SFML\Graphics\CircleShape.hpp>
 #include "MenuGameState.h"
 #include <iostream>
+#include <sstream>
 
 
 PlayGameState::PlayGameState()
@@ -11,6 +12,14 @@ PlayGameState::PlayGameState()
 	skeletonTexture_.loadFromFile("..\\Assets\\Skeleton.png");
 	carrotTexture_.loadFromFile("..\\Assets\\Carrot.png");
 	totemTexture_.loadFromFile("..\\Assets\\Totem.png");
+	
+	scoreFont_.loadFromFile("..\\Assets\\PressStart2P.ttf");
+
+	scoreText_.setFont(scoreFont_);
+	scoreText_.setString("Score: 0");
+	scoreText_.setPosition(sf::Vector2f(0, 0));
+	scoreText_.setCharacterSize(24);
+	scoreText_.setPosition(10, 10);
 
 	player_.getSprite().setTexture(humanTexture_);
 	player_.getSprite().setOrigin(sf::Vector2f(5, 20));
@@ -26,10 +35,10 @@ PlayGameState::PlayGameState()
 
 	foodPrototype_.getSprite().setTexture(carrotTexture_);
 	foodPrototype_.getSprite().setOrigin(sf::Vector2f(3, 12));
-	foodPrototype_.getHitbox().setSize(sf::Vector2f(8, 2));
-	foodPrototype_.getHitbox().setOrigin(sf::Vector2f(4, 1));
+	foodPrototype_.getHitbox().setSize(sf::Vector2f(4, 2));
+	foodPrototype_.getHitbox().setOrigin(sf::Vector2f(2, 1));
 
-	gameView_.setSize(sf::Vector2f(150, 150));
+	gameView_.setSize(150, 150);
 
 	restart();
 }
@@ -40,35 +49,27 @@ PlayGameState::~PlayGameState()
 
 void PlayGameState::restart()
 {
+	score_ = 0;
 	foods_.clear();
 	enemies_.clear();
-	firstLayer_.clear();
-	secondLayer_.clear();
-	thirdLayer_.clear();
+	drawStack_.clear();
 
 	player_.setPosition(sf::Vector2f());
 
-	for (int i = 0; i < rand() % 8 + 3; i++)
-	{
-		spawnEnemy();
-	}
-
-	for (int i = 0; i < rand() % 8 + 3; i++)
-	{
-		spawnFood();
-	}
+	foodPrototype_.setPosition(sf::Vector2f(0, 25));
+	foods_.insertFirst(foodPrototype_);
 }
 void PlayGameState::update(sf::Time const& deltaTime)
 {
 	updatePlayer(deltaTime);
 	updateEnemies(deltaTime);
 	updateFoods(deltaTime);
+
+	gameView_.setCenter(player_.getPosition());
 }
 void PlayGameState::draw(sf::RenderTarget& target,
 						 sf::RenderStates states) const
 {
-	target.setView(gameView_);
-
 	sf::RectangleShape playArea;
 	playArea.setFillColor(sf::Color::Transparent);
 	playArea.setSize(sf::Vector2f(150, 150));
@@ -77,29 +78,30 @@ void PlayGameState::draw(sf::RenderTarget& target,
 	playArea.setPosition(sf::Vector2f());
 	playArea.setOrigin(sf::Vector2f(150, 150) / 2.f);
 
-	target.draw(playArea, states);
-	drawFoodsDebug(target, states);
-	drawPlayerDebug(target, states);
-	drawEnemiesDebug(target, states);
+	target.setView(gameView_);
 
-	target.draw(firstLayer_, states);
-	target.draw(secondLayer_, states);
-	target.draw(thirdLayer_, states);
+	//target.draw(playArea, states);
+	//drawFoodsDebug(target, states);
+	//drawPlayerDebug(target, states);
+	//drawEnemiesDebug(target, states);
+
+	target.draw(drawStack_, states);
+
+	target.setView(uiView_);
+	target.draw(scoreText_, states);
 }
 
 
 
-void PlayGameState::checkCollision(Entity& entityOne, Entity& entityTwo)
+bool PlayGameState::checkCollision(Entity const& entityOne, Entity const& entityTwo)
 {
-	if (entityOne.getHitbox().intersects(entityTwo.getHitbox()))
-	{
-		entityOne.onCollision(entityTwo);
-	}
+	return entityOne.getHitbox().intersects(entityTwo.getHitbox());
 }
 
 
 void PlayGameState::spawnFood()
 {
+	sf::Vector2f const* playerPos = &player_.getPosition();
 	sf::Vector2f const* comparePosition = nullptr;
 	sf::Vector2f spawnPos;
 	sf::Vector2f deltaPos;
@@ -108,17 +110,17 @@ void PlayGameState::spawnFood()
 	float compareDistance = 0;
 	float minDistance = 50;
 
+	int radius = 50;
+
 	while (distanceToClosestNeighbour < minDistance)
 	{
-		spawnPos.x = rand() % 151 - 75;
-		spawnPos.y = rand() % 151 - 75;
+		spawnPos.x = playerPos->x + rand() % (radius * 2 + 1) - radius;
+		spawnPos.y = playerPos->y + rand() % (radius * 2 + 1) - radius;
 
-		comparePosition = &player_.getPosition();
-		deltaPos = spawnPos - *comparePosition;
-
+		deltaPos = spawnPos - *playerPos;
 		distanceToClosestNeighbour = sqrtf(powf(deltaPos.x, 2.f) + powf(deltaPos.x, 2.f));
 
-		FoodNode food = foods_.getFirst();
+		/*FoodNode food = foods_.getFirst();
 		while (food != nullptr)
 		{
 			comparePosition = &food->data.getPosition();
@@ -133,7 +135,7 @@ void PlayGameState::spawnFood()
 			food = food->getNext();
 		}
 
-		minDistance--;
+		minDistance--;*/
 	}
 	
 	foodPrototype_.setPosition(spawnPos);
@@ -141,28 +143,30 @@ void PlayGameState::spawnFood()
 }
 void PlayGameState::spawnEnemy()
 {
+	sf::Vector2f const* playerPos = &player_.getPosition();
 	sf::Vector2f const* comparePosition = nullptr;
 	sf::Vector2f spawnPos;
 	sf::Vector2f deltaPos;
 
 	float distanceToClosestNeighbour = 0;
 	float compareDistance = 0;
-	float minDistance = 100;
+	float minDistance = 50;
+
+	int radius = 75;
 
 	while (distanceToClosestNeighbour < minDistance)
 	{
-		spawnPos.x = rand() % 151 - 75;
-		spawnPos.y = rand() % 151 - 75;
+		spawnPos.x = playerPos->x + rand() % (radius * 2 + 1) - radius;
+		spawnPos.y = playerPos->y + rand() % (radius * 2 + 1) - radius;
 
-		comparePosition = &player_.getPosition();
-		deltaPos = spawnPos - *comparePosition;
-
+		deltaPos = spawnPos - *playerPos;
 		distanceToClosestNeighbour = sqrtf(powf(deltaPos.x, 2.f) + powf(deltaPos.x, 2.f));
 
-		EnemyNode enemy = enemies_.getFirst();
+		/*EnemyNode enemy = enemies_.getFirst();
 		while (enemy != nullptr)
 		{
 			comparePosition = &enemy->data.getPosition();
+
 			deltaPos = spawnPos - *comparePosition;
 			compareDistance = sqrtf(powf(deltaPos.x, 2.f) + powf(deltaPos.x, 2.f));
 
@@ -174,7 +178,7 @@ void PlayGameState::spawnEnemy()
 			enemy = enemy->getNext();
 		}
 
-		minDistance--;
+		minDistance--;*/
 	}
 
 	float speed = rand() % 40;
@@ -206,7 +210,7 @@ void PlayGameState::updatePlayer(sf::Time const& deltaTime)
 	player_.update(deltaTime);
 	gameView_.setCenter(player_.getPosition());
 
-	secondLayer_.stack(&player_);
+	drawStack_.add(&player_);
 }
 void PlayGameState::updateFoods(sf::Time const& deltaTime)
 {
@@ -217,67 +221,46 @@ void PlayGameState::updateFoods(sf::Time const& deltaTime)
 
 	while (food != nullptr)
 	{
-		while (food != nullptr && food->data.pollEvent(event))
+
+		if (checkCollision(player_, food->data))
 		{
-			if (event == Entity::Event::DEATH)
-			{
-				auto next = food->getNext();
-				food->remove();
-				delete food;
-				food = next;
-			}
+			auto next = food->getNext();
+			food->remove();
+			delete food;
+			food = next;
+
+			setScore(score_ + 1);
+
+			spawnFood();
+			spawnFood();
+			spawnEnemy();
 		}
-
-		if (food != nullptr)
+		else
 		{
-			checkCollision(player_, food->data);
-
-			if (food->data.getPosition().y < player_.getPosition().y)
-			{
-				firstLayer_.stack(&food->data);
-			}
-			else
-			{
-				thirdLayer_.stack(&food->data);
-			}
-
+			drawStack_.add(&food->data);
 			food = food->getNext();
 		}
 	}
 }
 void PlayGameState::updateEnemies(sf::Time const& deltaTime)
 {
-	Entity::Event event = Entity::Event::DEATH;
+	Entity::Event event;
 	Node<Enemy>* enemy = enemies_.getFirst();
 
 	while (enemy != nullptr)
 	{
-		while (enemy != nullptr && enemy->data.pollEvent(event))
+		
+		if (checkCollision(enemy->data, player_))
 		{
-			if (event == Entity::Event::DEATH)
-			{
-				auto next = enemy->getNext();
-				enemy->remove();
-				delete enemy;
-				enemy = next;
-			}
+			notify(Event::END);
+			enemy = nullptr;
 		}
-
-		if (enemy != nullptr)
+		else
 		{
 			enemy->data.update(deltaTime);
-			checkCollision(enemy->data, player_);
 			enemy->data.setTargetPos(player_.getPosition());
 
-			if (enemy->data.getPosition().y < player_.getPosition().y)
-			{
-				firstLayer_.stack(&enemy->data);
-			}
-			else
-			{
-				thirdLayer_.stack(&enemy->data);
-			}
-
+			drawStack_.add(&enemy->data);
 			enemy = enemy->getNext();
 		}
 	}
@@ -291,10 +274,10 @@ void PlayGameState::drawPlayerDebug(sf::RenderTarget& target, sf::RenderStates s
 	hitbox.setOutlineThickness(0.25f);
 	hitbox.setOutlineColor(sf::Color::Green);
 	hitbox.setFillColor(sf::Color::Transparent);
-
-	hitbox.setPosition(player_.getPosition());
+	
 	hitbox.setSize(player_.getHitbox().getSize());
 	hitbox.setOrigin(player_.getHitbox().getOrigin());
+	hitbox.setPosition(player_.getHitbox().getPosition());
 
 	target.draw(hitbox, states);
 }
@@ -350,4 +333,19 @@ void PlayGameState::drawEnemiesDebug(sf::RenderTarget& target, sf::RenderStates 
 
 		enemy = enemy->getNext();
 	}
+}
+
+int PlayGameState::getScore() const
+{
+	return score_;
+}
+
+
+void PlayGameState::setScore(int score)
+{
+	score_ = score;
+	
+	std::stringstream sstream;
+	sstream << score;
+	scoreText_.setString("Score: " + sstream.str());	
 }

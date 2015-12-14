@@ -93,6 +93,9 @@
     <ClCompile Include="Node.cpp">
       <Filter>Source Files\Templates</Filter>
     </ClCompile>
+    <ClCompile Include="EntityDrawLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="PlayGameState.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityDrawLayer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

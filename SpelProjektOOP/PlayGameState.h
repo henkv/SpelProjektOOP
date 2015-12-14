@@ -1,12 +1,14 @@
 #pragma once
 #include "GameState.h"
 #include <SFML\Graphics\Texture.hpp>
+#include <SFML\Graphics\Text.hpp>
 #include "Player.h"
 #include "Enemy.h"
 #include "Food.h"
 #include "LinkedList.h"
 #include "DirectionalInput.h"
 #include "DrawLayer.h"
+#include "EntityDrawLayer.h"
 
 class PlayGameState :
 	public GameState
@@ -20,11 +22,17 @@ class PlayGameState :
 	sf::Texture carrotTexture_;
 	sf::Texture skeletonTexture_;
 
+	sf::Font scoreFont_;
+
 	sf::View gameView_;
+	sf::View uiView_;
+
+	sf::Text scoreText_;
 
 	DrawLayer firstLayer_;
 	DrawLayer secondLayer_;
 	DrawLayer thirdLayer_;
+	EntityDrawLayer drawStack_;
 
 	DirectionalInput playerDirInput_;
 
@@ -35,6 +43,8 @@ class PlayGameState :
 	LinkedList<Food> foods_;
 	LinkedList<Enemy> enemies_;
 
+	int score_;
+
 	public:
 	PlayGameState();
 	virtual ~PlayGameState();
@@ -44,7 +54,7 @@ class PlayGameState :
 	virtual void draw(sf::RenderTarget& target,
 					  sf::RenderStates states) const;
 	
-	void checkCollision(Entity& entityOne, Entity& entityTwo);
+	bool checkCollision(Entity const& entityOne, Entity const& entityTwo);
 
 	void spawnFood();
 	void spawnEnemy();
@@ -56,4 +66,8 @@ class PlayGameState :
 	void drawPlayerDebug(sf::RenderTarget& target, sf::RenderStates states) const;
 	void drawFoodsDebug(sf::RenderTarget& target, sf::RenderStates states) const;
 	void drawEnemiesDebug(sf::RenderTarget& target, sf::RenderStates states) const;
+
+
+	int getScore() const;
+	void setScore(int score);
 };

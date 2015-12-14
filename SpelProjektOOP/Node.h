@@ -4,7 +4,7 @@
 template<typename T>
 class Node
 {
-	private:
+	public:
 	Node<T>* prev_;
 	Node<T>* next_;
 
@@ -48,10 +48,10 @@ void Node<T>::prepend(Node<T>* node)
 {
 	if (node != nullptr)
 	{
-		node->next = this;
-		node->prev = prev_;
-		if (node->prev != nullptr)
-			node->prev->next = node;
+		node->next_ = this;
+		node->prev_ = prev_;
+		if (node->prev_ != nullptr)
+			node->prev_->next_ = node;
 	}
 
 	prev_ = node;

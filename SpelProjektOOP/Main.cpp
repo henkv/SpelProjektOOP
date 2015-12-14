@@ -28,7 +28,12 @@ int main()
 					window.close(); 
 					break;
 
-				case sf::Event::Resized: 
+				case sf::Event::Resized:
+					game.onWindowEvent(event);
+					break;
+
+				case sf::Event::TextEntered:
+					game.onWindowEvent(event);
 					break;
 			}
 		}

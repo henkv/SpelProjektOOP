@@ -20,6 +20,7 @@ class Hitbox
 	void setSize(sf::Vector2f const& size);
 	void setOrigin(sf::Vector2f const& origin);
 	void setPosition(sf::Vector2f const& position);
+
 	void move(sf::Vector2f const& offset);
 
 	bool contains(sf::Vector2f const& point) const;

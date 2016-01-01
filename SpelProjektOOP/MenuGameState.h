@@ -21,6 +21,7 @@ class MenuGameState :
 	sf::Text highscoreText_;
 	sf::Text scoreText_;
 	sf::Text playText_;
+	sf::Text lastTryText_;
 
 	Hitbox playHitbox_;
 
@@ -34,5 +35,6 @@ class MenuGameState :
 					  sf::RenderStates states) const;
 
 	void setHighscore(string name, int score);
+	void setLastTry(int score);
 };
 

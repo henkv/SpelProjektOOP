@@ -52,6 +52,8 @@ void Game::onNotify(GameState::Event event, GameState* caller)
 		}
 		else if (caller == &playState_)
 		{
+			menuState_.setLastTry(playState_.getScore());
+
 			if (playState_.getScore() > highscore_)
 			{
 				highscore_ = playState_.getScore();

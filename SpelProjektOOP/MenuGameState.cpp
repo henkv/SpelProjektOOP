@@ -8,7 +8,12 @@ MenuGameState::MenuGameState()
 	sf::FloatRect textRect;
 
 	font_.loadFromFile("..\\Assets\\PressStart2P.ttf");
+	
 	const_cast<sf::Texture&>(font_.getTexture(32)).setSmooth(false);
+
+	lastTryText_.setFont(font_);
+	lastTryText_.setPosition(0, 150);
+	lastTryText_.setCharacterSize(32);
 
 	highscoreText_.setFont(font_);
 	highscoreText_.setPosition(0, -150);
@@ -23,6 +28,7 @@ MenuGameState::MenuGameState()
 	scoreText_.setCharacterSize(32);
 
 	const_cast<sf::Texture&>(font_.getTexture(48)).setSmooth(false);
+
 	playText_.setFont(font_);
 	playText_.setPosition(0, 0);
 	playText_.setCharacterSize(48);
@@ -73,6 +79,7 @@ void MenuGameState::draw(sf::RenderTarget& target,
 	target.draw(highscoreText_, states);
 	target.draw(scoreText_, states);
 	target.draw(playText_, states);
+	target.draw(lastTryText_, states);
 }
 
 void MenuGameState::setHighscore(string name, int score)
@@ -84,4 +91,15 @@ void MenuGameState::setHighscore(string name, int score)
 
 	sf::FloatRect const& textRect = scoreText_.getLocalBounds();
 	scoreText_.setOrigin(textRect.width / 2, textRect.height / 2);
+}
+
+void MenuGameState::setLastTry(int score)
+{
+	stringstream str;
+	str << score;
+
+	lastTryText_.setString("SCORE: " + str.str());
+
+	sf::FloatRect const& textRect = lastTryText_.getLocalBounds();
+	lastTryText_.setOrigin(textRect.width / 2, textRect.height / 2);
 }

@@ -11,10 +11,7 @@ class Entity :
 	public sf::Drawable
 {
 	public:
-	static enum Event
-	{
-		DEATH
-	};
+	static enum Event { DEATH };
 
 	private:
 	Hitbox hitbox_;

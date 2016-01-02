@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DirectionalInput.cpp" />
     <ClCompile Include="DrawLayer.cpp" />
@@ -40,6 +41,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="DirectionalInput.h" />
     <ClInclude Include="DrawLayer.h" />

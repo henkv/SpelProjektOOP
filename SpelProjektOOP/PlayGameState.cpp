@@ -9,7 +9,7 @@
 PlayGameState::PlayGameState()
 {
 	humanTexture_.loadFromFile("..\\Assets\\Human.png");
-	skeletonTexture_.loadFromFile("..\\Assets\\Skeleton.png");
+	skeletonTexture_.loadFromFile("..\\Assets\\SkeletonSheet.png");
 	carrotTexture_.loadFromFile("..\\Assets\\Carrot.png");
 	totemTexture_.loadFromFile("..\\Assets\\Totem.png");
 	
@@ -26,17 +26,26 @@ PlayGameState::PlayGameState()
 	player_.getHitbox().setSize(sf::Vector2f(6, 1));
 	player_.getHitbox().setOrigin(sf::Vector2f(3, 0.5f));
 
+
 	enemyPrototype_.getSprite().setTexture(skeletonTexture_);
+	enemyPrototype_.getSprite().setTextureRect(sf::IntRect(0, 0, 10, 20));
 	enemyPrototype_.getSprite().setOrigin(sf::Vector2f(5, 20));
+
+	enemyPrototype_.getWakeUpAnimation().setBounds(sf::IntRect(0, 0, 20, 1));
+	enemyPrototype_.getWakeUpAnimation().setFrameSize(sf::Vector2i(10, 20));
+	enemyPrototype_.getWakeUpAnimation().setFrameDuration(sf::milliseconds(100));
+
 	enemyPrototype_.getHitbox().setSize(sf::Vector2f(6, 1));
 	enemyPrototype_.getHitbox().setOrigin(sf::Vector2f(3, 0.5));
+
 	enemyPrototype_.setAggroRadius(100);
 	enemyPrototype_.setSpeed(5);
 
+
 	foodPrototype_.getSprite().setTexture(carrotTexture_);
 	foodPrototype_.getSprite().setOrigin(sf::Vector2f(3, 12));
-	foodPrototype_.getHitbox().setSize(sf::Vector2f(4, 2));
-	foodPrototype_.getHitbox().setOrigin(sf::Vector2f(2, 1));
+	foodPrototype_.getHitbox().setSize(sf::Vector2f(4, 4));
+	foodPrototype_.getHitbox().setOrigin(sf::Vector2f(2, 2));
 
 	gameView_.setSize(150, 150);
 
@@ -80,10 +89,10 @@ void PlayGameState::draw(sf::RenderTarget& target,
 
 	target.setView(gameView_);
 
-	//target.draw(playArea, states);
-	//drawFoodsDebug(target, states);
-	//drawPlayerDebug(target, states);
-	//drawEnemiesDebug(target, states);
+	target.draw(playArea, states);
+	drawFoodsDebug(target, states);
+	drawPlayerDebug(target, states);
+	drawEnemiesDebug(target, states);
 
 	target.draw(drawStack_, states);
 

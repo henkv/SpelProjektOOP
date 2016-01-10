@@ -9,6 +9,7 @@
 #include "DirectionalInput.h"
 #include "DrawLayer.h"
 #include "EntityDrawLayer.h"
+#include "Particle.h"
 
 class PlayGameState :
 	public GameState
@@ -21,6 +22,7 @@ class PlayGameState :
 	sf::Texture totemTexture_;
 	sf::Texture carrotTexture_;
 	sf::Texture skeletonTexture_;
+	sf::Texture particleTexture_;
 
 	sf::Font scoreFont_;
 
@@ -30,8 +32,6 @@ class PlayGameState :
 	sf::Text scoreText_;
 
 	DrawLayer firstLayer_;
-	DrawLayer secondLayer_;
-	DrawLayer thirdLayer_;
 	EntityDrawLayer drawStack_;
 
 	DirectionalInput playerDirInput_;
@@ -39,9 +39,11 @@ class PlayGameState :
 	Player player_;
 	Food foodPrototype_;
 	Enemy enemyPrototype_;
+	Particle particlePrototype_;
 
 	LinkedList<Food> foods_;
 	LinkedList<Enemy> enemies_;
+	LinkedList<Particle> paritcles_;
 
 	int score_;
 
@@ -58,10 +60,14 @@ class PlayGameState :
 
 	void spawnFood();
 	void spawnEnemy();
+	void spawnParticle(sf::Vector2f const& position);
 
 	void updatePlayer(sf::Time const& deltaTime) throw(...);
 	void updateFoods(sf::Time const& deltaTime);
 	void updateEnemies(sf::Time const& deltaTime);
+	void updateParticles(sf::Time const& deltaTime);
+
+	void drawParticles(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	void drawPlayerDebug(sf::RenderTarget& target, sf::RenderStates states) const;
 	void drawFoodsDebug(sf::RenderTarget& target, sf::RenderStates states) const;

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="DeathGameState.cpp" />
     <ClCompile Include="DirectionalInput.cpp" />
     <ClCompile Include="DrawLayer.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="Observer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayGameState.cpp" />
@@ -43,6 +45,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="DeathGameState.h" />
     <ClInclude Include="DirectionalInput.h" />
     <ClInclude Include="DrawLayer.h" />
     <ClInclude Include="Enemy.h" />
@@ -56,6 +59,7 @@
     <ClInclude Include="MenuGameState.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayGameState.h" />

@@ -13,6 +13,7 @@ Game::Game()
 
 	playState_.addObserver(this);
 	menuState_.addObserver(this);
+	deathState_.addObserver(this);
 	menuState_.setHighscore(nameHighscore_, highscore_);
 
 	currentState_ = &menuState_;
@@ -63,6 +64,11 @@ void Game::onNotify(GameState::Event event, GameState* caller)
 				newHighscore_ = true;
 			}
 			cout << "State Transition: Play > Menu" << endl;
+			currentState_ = &deathState_;
+			currentState_->restart();
+		}
+		else if (caller == &deathState_)
+		{
 			currentState_ = &menuState_;
 		}
 	}

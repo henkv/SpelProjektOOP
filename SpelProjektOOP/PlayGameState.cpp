@@ -12,6 +12,7 @@ PlayGameState::PlayGameState()
 	skeletonTexture_.loadFromFile("..\\Assets\\SkeletonSheet.png");
 	carrotTexture_.loadFromFile("..\\Assets\\Carrot.png");
 	totemTexture_.loadFromFile("..\\Assets\\Totem.png");
+	particleTexture_.loadFromFile("..\\Assets\\PlusOne.png");
 	
 	scoreFont_.loadFromFile("..\\Assets\\PressStart2P.ttf");
 
@@ -42,6 +43,12 @@ PlayGameState::PlayGameState()
 	foodPrototype_.getHitbox().setSize(sf::Vector2f(4, 2));
 	foodPrototype_.getHitbox().setOrigin(sf::Vector2f(2, 1));
 
+	particlePrototype_.getSprite().setTexture(particleTexture_);
+	particlePrototype_.getSprite().setOrigin(3.f, 2.5f);
+	particlePrototype_.direction(sf::Vector2f(0, -1));
+	particlePrototype_.duration(sf::milliseconds(250));
+	particlePrototype_.velocity(50.f);
+
 	gameView_.setSize(150, 150);
 
 	restart();
@@ -68,6 +75,7 @@ void PlayGameState::update(sf::Time const& deltaTime)
 	updatePlayer(deltaTime);
 	updateEnemies(deltaTime);
 	updateFoods(deltaTime);
+	updateParticles(deltaTime);
 
 	gameView_.setCenter(player_.getPosition());
 }
@@ -90,6 +98,7 @@ void PlayGameState::draw(sf::RenderTarget& target,
 	//drawEnemiesDebug(target, states);
 
 	target.draw(drawStack_, states);
+	drawParticles(target, states);
 
 	target.setView(uiView_);
 	target.draw(scoreText_, states);
@@ -194,6 +203,11 @@ void PlayGameState::spawnEnemy()
 	enemyPrototype_.setAggroRadius(100 * speedScale);
 	enemies_.insertFirst(enemyPrototype_);
 }
+void PlayGameState::spawnParticle(sf::Vector2f const& position)
+{
+	particlePrototype_.setPosition(position);
+	paritcles_.insertFirst(particlePrototype_);
+}
 
 
 void PlayGameState::updatePlayer(sf::Time const& deltaTime)
@@ -228,6 +242,7 @@ void PlayGameState::updateFoods(sf::Time const& deltaTime)
 
 		if (checkCollision(player_, food->data))
 		{
+			spawnParticle(food->data.getPosition());
 			auto next = food->getNext();
 			food->remove();
 			delete food;
@@ -269,6 +284,47 @@ void PlayGameState::updateEnemies(sf::Time const& deltaTime)
 		}
 	}
 }
+void PlayGameState::updateParticles(sf::Time const& deltaTime)
+{
+	Entity::Event event;
+	Node<Particle>* particle = paritcles_.getFirst();
+
+	while (particle != nullptr)
+	{
+		while (particle != nullptr && particle->data.pollEvent(event))
+		{
+			switch (event)
+			{
+				case Entity::DEATH:
+					auto next = particle->getNext();
+
+					particle->remove();
+					delete particle;
+					particle = next;
+					break;
+			}
+		}
+
+		if (particle != nullptr)
+		{
+			particle->data.update(deltaTime);
+			particle = particle->getNext();
+		}
+	}
+
+}
+
+void PlayGameState::drawParticles(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	Node<Particle>* particle = paritcles_.getFirst();
+
+	while (particle != nullptr)
+	{
+		target.draw(particle->data, states);
+		particle = particle->getNext();
+	}
+}
+
 
 
 void PlayGameState::drawPlayerDebug(sf::RenderTarget& target, sf::RenderStates states) const

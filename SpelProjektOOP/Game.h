@@ -1,10 +1,11 @@
 #pragma once
 #include <SFML\Graphics\Drawable.hpp>
 #include <SFML\System\Time.hpp>
+#include <SFML\Window\Event.hpp>
 #include "GameState.h"
 #include "PlayGameState.h"
 #include "MenuGameState.h"
-#include <SFML\Window\Event.hpp>
+#include "DeathGameState.h"
 
 class Game :
 	public sf::Drawable,
@@ -13,6 +14,7 @@ class Game :
 	private:
 	PlayGameState playState_;
 	MenuGameState menuState_;
+	DeathGameState deathState_;
 	GameState* currentState_;
 
 	bool newHighscore_;

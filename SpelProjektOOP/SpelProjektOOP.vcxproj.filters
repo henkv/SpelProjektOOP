@@ -31,11 +31,11 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{0e5e791d-2e58-4659-85a7-169e32b6b9c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entities\Components">
-      <UniqueIdentifier>{c4c7ed70-6d3c-4cd1-9a0c-6bfe8591358e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Templates">
       <UniqueIdentifier>{c3df2e01-d228-42ab-828e-d8b33cf95f01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{c4c7ed70-6d3c-4cd1-9a0c-6bfe8591358e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,13 +73,13 @@
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="DirectionalInput.cpp">
-      <Filter>Source Files\Entities\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Hitbox.cpp">
-      <Filter>Source Files\Entities\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Physics.cpp">
-      <Filter>Source Files\Entities\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="LinkedList.cpp">
       <Filter>Source Files\Templates</Filter>
@@ -96,8 +96,14 @@
     <ClCompile Include="EntityDrawLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeathGameState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Animation.cpp">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +161,14 @@
     <ClInclude Include="EntityDrawLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeathGameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Animation.h">
-      <Filter>Resource Files</Filter>
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

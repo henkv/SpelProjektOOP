@@ -9,7 +9,7 @@
 PlayGameState::PlayGameState()
 {
 	humanTexture_.loadFromFile("..\\Assets\\Human.png");
-	skeletonTexture_.loadFromFile("..\\Assets\\Skeleton.png");
+	skeletonTexture_.loadFromFile("..\\Assets\\SkeletonSheet.png");
 	carrotTexture_.loadFromFile("..\\Assets\\Carrot.png");
 	totemTexture_.loadFromFile("..\\Assets\\Totem.png");
 	
@@ -27,9 +27,13 @@ PlayGameState::PlayGameState()
 	player_.getHitbox().setOrigin(sf::Vector2f(3, 0.5f));
 
 	enemyPrototype_.getSprite().setTexture(skeletonTexture_);
+	enemyPrototype_.getSprite().setTextureRect(sf::IntRect(0, 0, 10, 20));
 	enemyPrototype_.getSprite().setOrigin(sf::Vector2f(5, 20));
 	enemyPrototype_.getHitbox().setSize(sf::Vector2f(6, 1));
 	enemyPrototype_.getHitbox().setOrigin(sf::Vector2f(3, 0.5));
+	enemyPrototype_.getAnimation().setFrameSize(sf::Vector2i(10, 20));
+	enemyPrototype_.getAnimation().setFrameDuration(sf::milliseconds(25));
+	enemyPrototype_.getAnimation().setBounds(sf::IntRect(0, 0, 20, 1));
 	enemyPrototype_.setAggroRadius(100);
 	enemyPrototype_.setSpeed(5);
 

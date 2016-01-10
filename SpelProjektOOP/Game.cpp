@@ -76,7 +76,7 @@ void Game::onNotify(GameState::Event event, GameState* caller)
 
 void Game::onWindowEvent(sf::Event event)
 {
-	if (event.type == sf::Event::TextEntered && newHighscore_)
+	if (event.type == sf::Event::TextEntered && newHighscore_ && currentState_ == &menuState_)
 	{
 		if (event.text.unicode == 8)
 		{

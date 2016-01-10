@@ -205,7 +205,11 @@ void PlayGameState::spawnEnemy()
 }
 void PlayGameState::spawnParticle(sf::Vector2f const& position)
 {
+
+	float directionX = (rand() % 51 - 25) / 100.f;
+
 	particlePrototype_.setPosition(position);
+	particlePrototype_.direction(sf::Vector2f(directionX, -1));
 	paritcles_.insertFirst(particlePrototype_);
 }
 
